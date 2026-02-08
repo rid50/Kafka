@@ -1,0 +1,130 @@
+Kafka with ZooKeeper
+----------------------
+Start Zookeeper: C:\apache-zookeeper-3.9.0\bin\zkserver
+Start Kafka: C:\kafka_2.13-3.9.0\bin\windows\kafka-server-start.bat C:\kafka_2.13-3.9.0\config\server.properties
+
+Kafka with KRaft (run from a host machine)
+-----------------
+cd c:\kafka_2.13-3.9.0
+.\bin\windows\kafka-server-start.bat .\config\kraft\server.properties
+
+logs is already formatted. Use --ignore-formatted to ignore this directory and format the others.	???????????????????????????????????????
+C:\kafka_2.13-3.9.0\bin\windows\kafka-storage.bat format --ignore-formatted --cluster-id $KAFKA_CLUSTER_ID --config c:\kafka_2.13-3.9.0\config\kraft\server.properties  
+  
+Generate a Cluster UUID:
+KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"	//for Linux
+.\bin\windows\kafka-storage.bat random-uuid
+5PK8UqqHTH-sm1yLhtyIPw
+
+Copy the UUID output from previous step
+set KAFKA_CLUSTER_ID=5PK8UqqHTH-sm1yLhtyIPw
+
+Format Log Directories:
+C:\kafka_2.13-3.9.0\bin\windows\kafka-storage.bat format --standalone -t $KAFKA_CLUSTER_ID -c c:\kafka_2.13-3.9.0\config\kraft\server.properties
+
+Start the Kafka Server:
+C:\kafka_2.13-3.9.0\bin\windows\kafka-server-start.bat C:\kafka_2.13-3.9.0\config\kraft\server.properties
+
+-----------------------------------------------------------------
+
+ Run producer
+C:\kafka_2.13-3.9.0\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic streams-plaintext-input
+>
+aaaaa
+
+Run consumer 
+C:\kafka_2.13-3.9.0\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic streams-plaintext-input
+
+-----------------------------------------------------------------
+
+Kafka Streams Demo Application
+https://kafka.apache.org/41/streams/quickstart/
+https://kafka.apache.org/41/streams/tutorial/
+
+Start the Kafka Server:
+C:\kafka_2.13-3.9.0\bin\windows\kafka-server-start.bat C:\kafka_2.13-3.9.0\config\kraft\server.properties
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --topic streams-plaintext-input
+C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --topic streams-wordcount-output
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --describe  --bootstrap-server localhost:9092
+C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
+
+Move your java program to the CLASSPATH environment variable	C:\projects\Kafka\Streams
+C:\kafka_2.13-3.9.0\bin\windows\kafka-run-class.bat org.apache.kafka.streams.examples.wordcount.WordCountDemo
+C:\kafka_2.13-3.9.0\bin\windows\kafka-run-class.bat kafka.streams.examples.wordcount.WordCountDemo
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-console-producer.bat --bootstrap-server localhost:9092 --topic streams-plaintext-input
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 ^
+    --topic streams-wordcount-output ^
+    --from-beginning ^
+    --property print.key=true ^
+    --property print.value=true ^
+    --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer ^
+    --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
+	
+
+Stop the Kafka Server:
+C:\kafka_2.13-3.9.0\bin\windows\kafka-server-stop.bat C:\kafka_2.13-3.9.0\config\kraft\server.properties
+
+
+
+------------------------------------------
+
+Kafka Docker
+https://hub.docker.com/r/apache/kafka
+https://kafka.apache.org/quickstart/
+
+docker pull apache/kafka:4.1.1
+docker pull apache/kafka:latest
+
+Start a Kafka broker:
+docker run -d --name broker apache/kafka:latest
+docker run -d -p 9092:9092 --name broker apache/kafka:latest
+
+Open a shell in the broker container:
+docker exec --workdir /opt/kafka/bin/ -it broker sh
+
+.\kafka-topics.sh --bootstrap-server localhost:9092 --create --topic test-topic
+
+.\kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test-topic
+>hello
+>world
+>Ctrl+C
+
+.\kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test-topic --from-beginning
+hello
+world
+
+.\kafka-topics.sh --describe --topic test-topic --bootstrap-server localhost:9092
+
+docker rm -f broker  // !!!!!!!!!!!!!!!!!!!!!!!!!   remove
+
+Kafka Connect
+https://kafka.apache.org/quickstart/
+
+/opt/kafka/bin $
+
+echo "plugin.path=/opt/kafka/libs/connect-file-3.9.0.jar" >> /opt/kafka/config/connect-standalone.properties
+
+echo foo > test.txt
+echo bar >> test.txt
+
+./connect-standalone.sh /opt/kafka/config/connect-standalone.properties /opt/kafka/config/connect-file-source.properties /opt/kafka/config/connect-file-sink.properties
+
+Open a shell in the broker container:
+docker exec --workdir /opt/kafka/bin/ -it broker sh
+
+more test.sink.txt
+foo
+bar
+
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic connect-test --from-beginning
+{"schema":{"type":"string","optional":false},"payload":"foo"}
+{"schema":{"type":"string","optional":false},"payload":"bar"}
+
+Stop the producer and consumer clients with Ctrl-C
+
+Stop the Kafka broker with 
+./kafka-server-stop.sh

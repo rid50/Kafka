@@ -1,0 +1,71 @@
+Write a streams app
+https://kafka.apache.org/41/streams/tutorial/
+
+mvn archetype:generate ^
+-DarchetypeGroupId=org.apache.kafka ^
+-DarchetypeArtifactId=streams-quickstart-java ^
+-DarchetypeVersion=4.1.1 ^
+-DgroupId=streams.examples ^
+-DartifactId=streams-quickstart ^
+-Dversion=0.1 ^
+-Dpackage=myapps
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-server-start.bat C:\kafka_2.13-3.9.0\config\kraft\server.properties
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --describe --exclude-internal --bootstrap-server localhost:9092
+C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-console-producer.bat --bootstrap-server localhost:9092 --topic streams-plaintext-input
+
+------------------------------------------------------------------------------------------------------
+Execute myapps.Pipe.java
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic streams-pipe-output --from-beginning
+	
+	cd C:\projects\Kafka\Streams\streams-quickstart
+	mvn clean package
+	mvn exec:java -Dexec.mainClass=myapps.Pipe
+
+Or
+java -cp ".;C:/kafka_2.13-3.9.0/libs/*;C:\projects\Kafka\Streams\streams-quickstart\target\streams-quickstart-0.1.jar" myapps.Pipe
+
+Or
+
+set classpath
+CLASSPATH=C:\projects\Kafka\Streams
+
+mkdir C:\projects\Kafka\Streams\myapps
+copy Pipe.class to C:\projects\Kafka\Streams\myapps
+C:\kafka_2.13-3.9.0\bin\windows\kafka-run-class.bat myapps.Pipe
+
+------------------------------------------------------------------------------------------------------
+Execute WordCountDemo.java
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 ^
+    --topic streams-wordcount-output ^
+    --from-beginning ^
+    --property print.key=true ^
+    --property print.value=true ^
+    --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer ^
+    --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
+	
+cd C:\projects\Kafka\Streams
+javac -cp "C:/kafka_2.13-3.9.0/libs/*" WordCountDemo.java
+java -cp ".;C:/kafka_2.13-3.9.0/libs/*" WordCountDemo
+
+Or
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-run-class.bat --enable-native-access=ALL-UNNAMED WordCountDemo
+
+
+------------------------------------------------------------------------------------------------------
+Execute KafkaApplication.java
+
+cd C:\projects\Kafka\Streams\spring-boot
+.\mvnw spring-boot:build-image
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-server-start.bat C:\kafka_2.13-3.9.0\config\kraft\server.properties
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic streams-pipe-output --from-beginning
+
+.\mvnw spring-boot:run
