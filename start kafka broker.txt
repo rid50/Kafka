@@ -1,3 +1,11 @@
+In case of error
+ERROR Exiting Kafka due to fatal exception (kafka.Kafka$)
+java.lang.RuntimeException: No readable meta.properties files found.
+format the Storage Directory:	
+.\bin\windows\kafka-storage.bat random-uuid
+qrZtcraNSweh7cVy-aTEZA
+.\bin\windows\kafka-storage.bat format -t qrZtcraNSweh7cVy-aTEZA -c config\kraft\server.properties
+
 Kafka with ZooKeeper
 ----------------------
 Start Zookeeper: C:\apache-zookeeper-3.9.0\bin\zkserver

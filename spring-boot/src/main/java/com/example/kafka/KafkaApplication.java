@@ -37,10 +37,17 @@ public class KafkaApplication {
     public void listen(String message) {
         System.out.println("Received message: " + message);
     }
+
+    // ANSI escape code constants
+    public static final String RESET = "\u001B[0m";
+    public static final String GREEN = "\u001B[32m";
+    public static final String RED = "\u001B[31m";
 	
     @Bean
     public ApplicationRunner runner(KafkaTemplate<String, String> template) {
+    //public ApplicationRunner runner() {
         return args -> {
+			System.out.println(RED + "****************************************************************" + RESET);				
             template.send("streams-pipe-output", "Hello, Kafka!");
         };
     }	

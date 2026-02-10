@@ -27,7 +27,7 @@ public class BookingConsumer : IBookingConsumer
             {"group.id", "booking_consumer" },
             {"bootstrap.servers", "localhost:9092" },
             {"enable.auto.commit", "true" },
-            //{"AutoOffsetReset", "AutoOffsetReset.Earliest" }
+            {"auto-offset-reset", "earliest" }
         };
 
         CancellationTokenSource cts = new CancellationTokenSource();
