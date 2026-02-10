@@ -16,8 +16,8 @@ public class SpringKafkaStreamaRealTimeApp {
 		SpringApplication.run(SpringKafkaStreamaRealTimeApp.class, args);
 	}
 	
-	@Value("${kafka.input.topic}")
-	private String kafkaInputTopic;
+	// @Value("${kafka.input.topic}")
+	// private String kafkaInputTopic;
 	
     @Bean
     public ApplicationRunner runner() {
