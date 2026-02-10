@@ -1,0 +1,12 @@
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers:
+        - localhost:9092
+      group-id: ytube-group
+#      auto-offset-reset: earliest
+#      key-deserializer:
+#      value-deserializer:
+    producer:
+      bootstrap-servers:
+        - localhost:9092
