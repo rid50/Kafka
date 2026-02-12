@@ -1,10 +1,14 @@
 In case of error
 ERROR Exiting Kafka due to fatal exception (kafka.Kafka$)
 java.lang.RuntimeException: No readable meta.properties files found.
+
+delete files from C:\kafka_2.13-3.9.0\kafka-logs folder
+
 format the Storage Directory:	
 .\bin\windows\kafka-storage.bat random-uuid
 qrZtcraNSweh7cVy-aTEZA
 .\bin\windows\kafka-storage.bat format -t qrZtcraNSweh7cVy-aTEZA -c config\kraft\server.properties
+.\bin\windows\kafka-storage.bat format --ignore-formatted --cluster-id qrZtcraNSweh7cVy-aTEZA -c config\kraft\server.properties
 
 Kafka with ZooKeeper
 ----------------------
@@ -17,7 +21,7 @@ cd c:\kafka_2.13-3.9.0
 .\bin\windows\kafka-server-start.bat .\config\kraft\server.properties
 
 logs is already formatted. Use --ignore-formatted to ignore this directory and format the others.	???????????????????????????????????????
-C:\kafka_2.13-3.9.0\bin\windows\kafka-storage.bat format --ignore-formatted --cluster-id $KAFKA_CLUSTER_ID --config c:\kafka_2.13-3.9.0\config\kraft\server.properties  
+C:\kafka_2.13-3.9.0\bin\windows\kafka-storage.bat format --ignore-formatted --cluster-id $KAFKA_CLUSTER_ID --config config\kraft\server.properties  
   
 Generate a Cluster UUID:
 KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"	//for Linux

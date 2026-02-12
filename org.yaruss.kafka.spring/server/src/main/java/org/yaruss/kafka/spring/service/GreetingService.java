@@ -1,4 +1,4 @@
-package com.org.yaruss.kafka.spring.service;
+package org.yaruss.kafka.spring.service;
 
 import java.util.Calendar;
 import java.util.UUID;

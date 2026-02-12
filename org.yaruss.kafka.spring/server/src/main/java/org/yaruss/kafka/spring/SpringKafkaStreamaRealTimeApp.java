@@ -1,4 +1,4 @@
-package com.org.yaruss.kafka.spring;
+package org.yaruss.kafka.spring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +11,11 @@ import org.springframework.boot.ApplicationRunner;
 @SpringBootApplication
 //@SpringBootApplication(exclude = {WebSocketConfig.class})
 public class SpringKafkaStreamaRealTimeApp {
-
+    // ANSI escape code constants
+    public static final String RESET = "\u001B[0m";
+    public static final String GREEN = "\u001B[32m";
+    public static final String RED = "\u001B[31m";	
+	
 	public static void main(String[] args) {
 		SpringApplication.run(SpringKafkaStreamaRealTimeApp.class, args);
 	}
@@ -23,7 +27,7 @@ public class SpringKafkaStreamaRealTimeApp {
     public ApplicationRunner runner() {
     //public ApplicationRunner runner(KafkaTemplate<String, String> template) {
         return args -> {
-			System.out.println("Greeting Message :: ****************************************************************************");			
+		System.out.println(GREEN + "ApplicationRunner: ****************************************************************" + RESET);			
             //template.send(kafkaInputTopic, "Hello, Kafka!");
         };
     }		

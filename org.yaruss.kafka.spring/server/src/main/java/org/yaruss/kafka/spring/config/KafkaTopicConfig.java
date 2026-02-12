@@ -1,4 +1,4 @@
-package com.org.yaruss.kafka.spring.config;
+package org.yaruss.kafka.spring.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;

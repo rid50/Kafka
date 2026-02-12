@@ -1,4 +1,4 @@
-package com.org.yaruss.kafka.spring.config;
+package org.yaruss.kafka.spring.config;
 
 import java.util.Properties;
 
@@ -31,7 +31,7 @@ public class KafkaStreamsConfig {
 	@Bean
 	public KStream<String, String> kstream() {
 		Properties props = new Properties();
-		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "roytuts-stomp-websocket");
+		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "yaruss-stomp-websocket");
 		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBootstrapServer);
 		props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 		props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());

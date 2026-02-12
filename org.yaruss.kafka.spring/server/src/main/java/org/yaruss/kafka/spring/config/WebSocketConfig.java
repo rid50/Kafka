@@ -1,4 +1,4 @@
-package com.org.yaruss.kafka.spring.config;
+package org.yaruss.kafka.spring.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

@@ -1,4 +1,4 @@
-package com.org.yaruss.kafka.spring.consumer;
+package org.yaruss.kafka.spring.consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -71,8 +71,10 @@ C:\kafka_2.13-3.9.0\bin\windows\kafka-console-consumer.bat --bootstrap-server lo
 .\mvnw spring-boot:run
 
 
-C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --topic roytuts-input
-C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --topic roytuts-output
-C:\kafka_2.13-3.9.0\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic roytuts-output
+C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --topic yaruss-input
+C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --topic yaruss-output
+C:\kafka_2.13-3.9.0\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic yaruss-input
 C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
+
+C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --delete --topic yaruss-input
 
