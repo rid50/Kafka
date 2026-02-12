@@ -19,30 +19,29 @@ declare const $: any;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  url = 'http://localhost:8080/websocket'
-  client: any;
-  
-  ngOnInit() {
-	this.title.setTitle('Angular Spring Websocket');
-  }
+  //url = 'http://localhost:8080/websocket'
+  //client: any;
   
   constructor(private title: Title){
-    this.connection();
+    //this.connection();
   }
   
-  connection() {
+  ngOnInit() {
+	this.title.setTitle('Angular Spring Websocket');  
+  //connection() {
 //debugger; 
 	const client = new Client({
 	  // For SockJS, set a factory that creates a new SockJS instance
-	  webSocketFactory: () => new SockJS('http://localhost:8080/websocket'),
+	  //webSocketFactory: () => new SockJS('http://localhost:8080/websocket'),
 	  
-	  //brokerURL: 'ws://localhost:8080/websocket', // Native WebSocket URL (if available)
+	  brokerURL: 'ws://localhost:8080/websocket', // Native WebSocket URL (if available)
 	  // connectHeaders: {
 		// login: 'user',
 		// passcode: 'password',
 	  // },
-	  debug: function (str) {
-		console.log(str);
+	  debug: (str) => console.log(str),
+	  onDisconnect: () => {
+		console.log('Disconnected');
 	  },
 	  reconnectDelay: 5000,
 	  heartbeatIncoming: 4000,
@@ -79,9 +78,6 @@ export class AppComponent implements OnInit {
 	};
 
 	client.activate();  
-  
-  
-  
   }
   
   // connection(){
@@ -104,19 +100,4 @@ export class AppComponent implements OnInit {
 	// client.activate();	
 	  
   // }  
-
-  // connection(){
-    // let ws = new SockJS(this.url);
-    // this.client = Stomp.over(ws);
-    // let that: any = this;
-	
-    // this.client.connect({}, function(frame: any) {
-      // that.client.subscribe("/topic/greeting", (message: any) => {
-	    // console.log(`Received: ${message.body}`)
-        // if(message.body) {
-		  // $(".msg").html(message.body)
-        // }
-      // });
-    // });	  
-  // }
 }
