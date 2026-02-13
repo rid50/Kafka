@@ -19,13 +19,13 @@ public class KafkaController {
 	
     @RequestMapping("/start_kafka_broker")
     public ResponseEntity<String> get() {
-		messageProducer.setEnableDisableSheduling();
+		messageProducer.enableSheduling();
 		return ResponseEntity.ok("The request has succeeded."); 
     }
 
     @RequestMapping("/stop_kafka_broker")
     public ResponseEntity<String> get2() {
-		messageProducer.setEnableDisableSheduling();
+		messageProducer.disableSheduling();
 		return ResponseEntity.ok("The request has succeeded."); 
     }
 	

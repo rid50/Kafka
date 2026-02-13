@@ -39,8 +39,12 @@ public class MessageProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 	
-	public void setEnableDisableSheduling() {
-		isEnabled = !isEnabled;
+	public void enableSheduling() {
+		isEnabled = true;
+	}
+
+	public void disableSheduling() {
+		isEnabled = false;
 	}
 	
 	//@Bean

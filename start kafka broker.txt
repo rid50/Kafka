@@ -2,7 +2,7 @@ In case of error
 ERROR Exiting Kafka due to fatal exception (kafka.Kafka$)
 java.lang.RuntimeException: No readable meta.properties files found.
 
-delete files from C:\kafka_2.13-3.9.0\kafka-logs folder
+del C:\kafka_2.13-3.9.0\kafka-logs
 
 format the Storage Directory:	
 .\bin\windows\kafka-storage.bat random-uuid
@@ -139,4 +139,4 @@ bar
 Stop the producer and consumer clients with Ctrl-C
 
 Stop the Kafka broker with 
-./kafka-server-stop.sh
+./kafka-server-stop.bat

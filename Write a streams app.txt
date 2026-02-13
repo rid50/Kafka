@@ -70,6 +70,14 @@ C:\kafka_2.13-3.9.0\bin\windows\kafka-console-consumer.bat --bootstrap-server lo
 
 .\mvnw spring-boot:run
 
+mvn clean package
+java -jar org.yaruss.kafka.spring-0.0.1-SNAPSHOT.jar
+
+netstat -ano | findstr :8080
+tasklist | findstr 4432
+taskkill /F /PID 4432
+
+
 
 C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --topic yaruss-input
 C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --topic yaruss-output
@@ -77,4 +85,8 @@ C:\kafka_2.13-3.9.0\bin\windows\kafka-console-consumer.bat --bootstrap-server lo
 C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
 
 C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --delete --topic yaruss-input
+
+# Set retention for 'yaruss-input' to 1 min (60000 ms)
+C:\kafka_2.13-3.9.0\bin\windows\kafka-configs.bat --bootstrap-server localhost:9092 --entity-type topics --entity-name yaruss-input --alter --add-config retention.ms=60000
+C:\kafka_2.13-3.9.0\bin\windows\kafka-configs.bat --bootstrap-server localhost:9092 --entity-type topics --entity-name yaruss-output --alter --add-config retention.ms=60000
 

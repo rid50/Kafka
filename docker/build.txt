@@ -1,0 +1,15 @@
+./mvnw clean package
+docker-compose up --build
+docker compose up -d
+http://localhost:8080
+
+
+# move to another machine
+docker stop geoplugin-service
+docker commit geoplugin-service geoplugin-service
+docker save geoplugin-service > geoplugin-service.tar
+
+#create a new container after move
+docker load < geoplugin-service.tar
+docker run -p 3000:3000 --name=geoplugin-service -d geoplugin-service
+
