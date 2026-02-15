@@ -90,3 +90,4 @@ C:\kafka_2.13-3.9.0\bin\windows\kafka-topics.bat --bootstrap-server localhost:90
 C:\kafka_2.13-3.9.0\bin\windows\kafka-configs.bat --bootstrap-server localhost:9092 --entity-type topics --entity-name yaruss-input --alter --add-config retention.ms=60000
 C:\kafka_2.13-3.9.0\bin\windows\kafka-configs.bat --bootstrap-server localhost:9092 --entity-type topics --entity-name yaruss-output --alter --add-config retention.ms=60000
 
+docker rm -f broker

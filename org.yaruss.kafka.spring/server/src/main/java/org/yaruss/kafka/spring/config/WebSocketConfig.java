@@ -12,7 +12,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/websocket").setAllowedOriginPatterns("*");
+		registry.addEndpoint("/ws").setAllowedOriginPatterns("*");
 		//registry.addEndpoint("/websocket").setAllowedOrigins("http://localhost:4200").withSockJS();
 	}
 
@@ -20,7 +20,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	public void configureMessageBroker(MessageBrokerRegistry config) {
 		config.enableSimpleBroker("/topic");
 		//config.enableSimpleBroker("/topic", "/queue"); 
-		//config.setApplicationDestinationPrefixes("/app");
+		config.setApplicationDestinationPrefixes("/app");
 	}
 
 }

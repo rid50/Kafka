@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
-//import com.roytuts.spring.apache.kafka.streams.websocket.stomp.server.service.GreetingService;
 import org.yaruss.kafka.spring.service.GreetingService;
 
 @Component

@@ -20,29 +20,34 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.10</version>
-		<!-- <version>4.0.0</version>		 -->
+		<!-- <version>3.5.10</version> -->
+		<version>4.0.2</version>		
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+		<!-- <dependency> -->
+			<!-- <groupId>org.springframework.boot</groupId> -->
+			<!-- <artifactId>spring-boot-starter-web</artifactId> -->
+		<!-- </dependency> -->
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
-			<!-- <artifactId>spring-boot-starter-kafka</artifactId> -->
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-kafka</artifactId>
+			<!-- <version>4.0.0</version> -->
+		</dependency>
+
+		<!-- <dependency> -->
+			<!-- <groupId>org.springframework.kafka</groupId> -->
+			<!-- <artifactId>spring-kafka</artifactId> -->
 			<!-- <version>4.0.2</version> -->
 			<!-- <scope>compile</scope>			 -->
-		</dependency>
+		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
@@ -76,9 +81,13 @@
 				<configuration>
 					<excludes>
 						<!-- Exclude a specific file by path relative to the source root (src/main/java) -->
-						<!-- <exclude>com/roytuts/spring/apache/kafka/streams/websocket/stomp/server/config/WebSocketConfig.java</exclude> -->
+						<!-- <exclude>org/yaruss/kafka/spring/config/WebSocketConfig.java</exclude> -->
+						
 						<!-- Exclude all files in a specific directory -->
-						<exclude>**/uncompilable/**/*.java</exclude>
+						<!-- <exclude>**/org/yaruss/kafka/spring/config/**/*.java</exclude> -->
+						<!-- <exclude>**/org/yaruss/kafka/spring/consumer/**/*.java</exclude> -->
+						<!-- <exclude>**/org/yaruss/kafka/spring/producer/**/*.java</exclude> -->
+						<!-- <exclude>**/org/yaruss/kafka/spring/service/**/*.java</exclude> -->
 					</excludes>
 				</configuration>
 			</plugin>			
