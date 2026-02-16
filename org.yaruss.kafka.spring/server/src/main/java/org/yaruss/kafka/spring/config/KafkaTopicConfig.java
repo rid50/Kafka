@@ -16,14 +16,14 @@ public class KafkaTopicConfig {
 
 	@Bean
 	public NewTopic inputTopic() {
-		NewTopic newTopic = new NewTopic(kafkaInputTopic, 1, (short) 1);
+		NewTopic newTopic = new NewTopic(kafkaInputTopic, 1, (short) 3);
 
 		return newTopic;
 	}
 
 	@Bean
 	public NewTopic outputTopic() {
-		NewTopic newTopic = new NewTopic(kafkaOutputTopic, 1, (short) 1);
+		NewTopic newTopic = new NewTopic(kafkaOutputTopic, 1, (short) 3);
 
 		return newTopic;
 	}

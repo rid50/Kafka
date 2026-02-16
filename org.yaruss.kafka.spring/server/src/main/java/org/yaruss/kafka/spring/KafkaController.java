@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.yaruss.kafka.spring.producer.MessageProducer;
+//import org.yaruss.kafka.spring.consumer.MessageConsumer;
+//import org.yaruss.kafka.spring.config.KafkaStreamsConfig;
 
 @RestController
 public class KafkaController {
@@ -17,14 +19,20 @@ public class KafkaController {
 	@Autowired
 	private MessageProducer messageProducer;
 	
+	//@Autowired
+	//KafkaStreamsConfig kafkaStreamsConfig;
+	//MessageConsumer messageConsumer;
+	
     @RequestMapping("/start_kafka_broker")
     public ResponseEntity<String> get() {
+		//messageProducer.consumeMessage("===========================================");
 		messageProducer.enableSheduling();
 		return ResponseEntity.ok("The request has succeeded."); 
     }
 
     @RequestMapping("/stop_kafka_broker")
     public ResponseEntity<String> get2() {
+		//messageConsumer.consumeMessage("===========================================");		
 		messageProducer.disableSheduling();
 		return ResponseEntity.ok("The request has succeeded."); 
     }

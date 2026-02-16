@@ -82,6 +82,8 @@
 					<excludes>
 						<!-- Exclude a specific file by path relative to the source root (src/main/java) -->
 						<!-- <exclude>org/yaruss/kafka/spring/config/WebSocketConfig.java</exclude> -->
+						<!-- <exclude>org/yaruss/kafka/spring/config/KafkaStreamsConfig.java</exclude> -->
+						<!-- <exclude>org/yaruss/kafka/spring/config/KafkaTopicConfig.java</exclude> -->
 						
 						<!-- Exclude all files in a specific directory -->
 						<!-- <exclude>**/org/yaruss/kafka/spring/config/**/*.java</exclude> -->
