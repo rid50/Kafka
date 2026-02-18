@@ -2,9 +2,11 @@
 FROM eclipse-temurin:21-jre-alpine
 # FROM alpine:latest AS build-stage
 WORKDIR /opt/app
-# USER root
+#USER root
 COPY /server/target/*.jar app.jar
-# COPY create-topics.sh /tmp/create-topics.sh
+#COPY create-topics.sh /tmp/create-topics.sh
+#RUN chmod +x /tmp/create-topics.sh
+#CMD /tmp/create-topics.sh
 # COPY --chmod=644 /data/create.txt /tmp/.
 # RUN ls -la /tmp
 # COPY . /tmp

@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 networks:
   kafka-net:
     driver: bridge
@@ -6,9 +6,9 @@ networks:
 services:
   kafka:
     #image: wurstmeister/kafka  
-    image: apache/kafka-native:4.1.1
-#    image: bitnami/kafka:latest
-#    image: apache/kafka:4.1.1
+    #image: bitnami/kafka:latest
+    image: apache/kafka:4.1.1
+    #image: apache/kafka-native:4.1.1
     container_name: broker
     ports:
       - "9092:9092"
@@ -32,13 +32,22 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
       KAFKA_NUM_PARTITIONS: 3      
       # Log directory formatting (required for KRaft persistent storage)
       KAFKA_LOG_DIRS: /var/lib/kafka/data
-      #KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false' #Wurstmeister Image Enables automatic topic creation The default value is "true" 
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: true #Wurstmeister Image Enables automatic topic creation The default value is "true" 
       #KAFKA_CREATE_TOPICS: "yaruss-input:1:1,yaruss-output:1:1" #Wurstmeister Image
       #KAFKA_CLUSTER_ID: $(opt/kafka/bin/kafka-storage.sh random-uuid)
       #KAFKA_CLUSTER_ID: "5L6g3nShT-eMCtK--X86sw"
+    healthcheck:
+      #test: ["CMD", "kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]
+      test: ["CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server=kafka:9092", "--list"]
+      #test: nc -z kafka 9092 || exit -1      
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s        
     # Use 'command' to generate a cluster UUID and format storage on first run
 #    command: 
 #      - "sh"
@@ -49,37 +58,43 @@ services:
       - kafka-net
 
   init-kafka:
-    image: apache/kafka:4.1.1
-    networks:
-      - kafka-net
-    depends_on:
-      - kafka
-    entrypoint: [ '/bin/sh', '-c' ]
-    command:
+   image: apache/kafka:4.1.1
+   #image: apache/kafka-native:4.1.1    
+   networks:
+     - kafka-net    
+   depends_on:
+     kafka:
+       condition: service_healthy
+       #condition: service_started      
+   entrypoint: [ '/bin/sh', '-c' ]
+   command: |
      "
-	  #sleep 15
      # Wait for Kafka to be ready
      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --list
 
-     echo 'Creating kafka topics'
+     #echo '======================== Creating kafka topics'
      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic yaruss-input --replication-factor 3 --partitions 1
      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic yaruss-output --replication-factor 3 --partitions 1
 
-     echo 'Successfully created the following topics:'
+     echo '======================== Successfully created the following topics:'
      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --list
      "
 
   app:
-    build: .
-    ports:
-      - "8080:8080"
-    depends_on:
-      - kafka
-    environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      # SPRING_PROFILES_ACTIVE: prod
-    networks:
-      - kafka-net
+   container_name: spring_boot_app  
+   build: .
+   ports:
+     - "8080:8080"
+   depends_on:
+     init-kafka:
+     #kafka:
+       #condition: service_healthy
+       condition: service_started      
+   environment:
+     SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+     # SPRING_PROFILES_ACTIVE: prod
+   networks:
+     - kafka-net
 
 volumes:
   kafka_data:
