@@ -1,6 +1,14 @@
 # FROM eclipse-temurin:17-jdk-alpine AS build
 FROM eclipse-temurin:21-jre-alpine
+# FROM alpine:latest AS build-stage
 WORKDIR /opt/app
+# USER root
 COPY /server/target/*.jar app.jar
+# COPY create-topics.sh /tmp/create-topics.sh
+# COPY --chmod=644 /data/create.txt /tmp/.
+# RUN ls -la /tmp
+# COPY . /tmp
+# RUN ls -R /tmp
+# RUN chmod +x /usr/local/bin/create-topics.sh
 ENTRYPOINT ["java","-jar","app.jar"]
-#ENTRYPOINT
+# ENTRYPOINT
