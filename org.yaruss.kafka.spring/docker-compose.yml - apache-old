@@ -7,15 +7,8 @@ services:
   kafka:
     #image: wurstmeister/kafka  
     #image: bitnami/kafka:latest
-    image: apache/kafka:latest
+    image: apache/kafka:4.1.1
     #image: apache/kafka-native:4.1.1
-    #build:
-     # context: .
-      
-#      context: .
-#      dockerfile_inline: |
-#        FROM alpine:latest
-#        RUN apk add --no-cache nano    
     container_name: broker
     ports:
       - "9092:9092"
@@ -48,8 +41,8 @@ services:
       #KAFKA_CLUSTER_ID: $(opt/kafka/bin/kafka-storage.sh random-uuid)
       #KAFKA_CLUSTER_ID: "5L6g3nShT-eMCtK--X86sw"
     healthcheck:
-      test: ["CMD", "/opt/kafka/bin/kafka-broker-api-versions.sh", "--bootstrap-server", "kafka:9092"]
-      #test: ["CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server=kafka:9092", "--list"]
+      #test: ["CMD", "kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]
+      test: ["CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server=kafka:9092", "--list"]
       #test: nc -z kafka 9092 || exit -1      
       interval: 10s
       timeout: 5s
@@ -63,45 +56,45 @@ services:
 
     networks:
       - kafka-net
-  
+
   init-kafka:
-    image: apache/kafka:latest
+   image: apache/kafka:4.1.1
    #image: apache/kafka-native:4.1.1    
-    networks:
-      - kafka-net    
-    depends_on:
-      kafka:
-        condition: service_healthy
-        #condition: service_started      
-    entrypoint: [ '/bin/sh', '-c' ]
-    command: |
+   networks:
+     - kafka-net    
+   depends_on:
+     kafka:
+       condition: service_healthy
+       #condition: service_started      
+   entrypoint: [ '/bin/sh', '-c' ]
+   command: |
      "
      # Wait for Kafka to be ready
      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --list
- 
+
      #echo '======================== Creating kafka topics'
      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic yaruss-input --replication-factor 3 --partitions 1
      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic yaruss-output --replication-factor 3 --partitions 1
- 
+
      echo '======================== Successfully created the following topics:'
      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --list
      "
- 
+
   app:
-    container_name: spring_boot_app  
-    build: .
-    ports:
-      - "8080:8080"
-    depends_on:
-      init-kafka:
-      #kafka:
-        #condition: service_healthy
-        condition: service_started      
-    environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+   container_name: spring_boot_app  
+   build: .
+   ports:
+     - "8080:8080"
+   depends_on:
+     init-kafka:
+     #kafka:
+       #condition: service_healthy
+       condition: service_started      
+   environment:
+     SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
      # SPRING_PROFILES_ACTIVE: prod
-    networks:
-      - kafka-net
+   networks:
+     - kafka-net
 
 volumes:
   kafka_data:

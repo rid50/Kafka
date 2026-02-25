@@ -1,0 +1,86 @@
+// https://anton-pribora.ru/articles/docker/programmers_path/
+
+================================================ Проброс портов ================================================
+
+docker run -t --detach --entrypoint /bin/cat --name my_container --publish=3132:80 debian:stretch-slim
+
+//Debian 9 ("Stretch") has reached its End-of-Life (EOL) and is no longer supported on the main mirrors
+//you should update your system's sources.list file
+
+//echo "deb http://archive.debian.org/debian stretch main contrib non-free" > /etc/apt/sources.list
+docker exec -it my_container sh -c "echo 'deb http://archive.debian.org/debian stretch main contrib non-free' > /etc/apt/sources.list"
+
+# Обновляем дерево пакетов
+docker exec --tty --interactive my_container apt update
+
+# Устанавливаем консольный php
+docker exec --tty --interactive my_container apt install php7.0-cli
+
+# Создаём index.php в контейнере
+echo "<?php echo PHP_VERSION . PHP_EOL ?>" | docker exec --interactive my_container tee index.php
+
+# Запускаем php-сервер на 80 порту контейнера
+docker exec --tty --interactive my_container php -S 0.0.0.0:80 index.php
+
+curl -s http://127.0.0.1:3132 
+"7.0.33-0+deb9u8"
+
+================================================ Проброс папки ================================================
+
+docker container rm -f my_container
+
+echo "<?php echo 'PHP ' . PHP_VERSION ?>' is the best!\n';" > ./volume/index.php
+
+C:\projects\Kafka\Streams\docker-php\volume
+
+// запускаем контейнер с пробросом папки проекта:
+docker run --tty --detach --entrypoint /bin/cat --name my_container --volume ./volume:/my_volume --publish=3132:80 debian:stretch-slim
+
+# Обновляем дерево пакетов
+docker exec -it my_container sh -c "echo 'deb http://archive.debian.org/debian stretch main contrib non-free' > /etc/apt/sources.list"
+docker exec --tty --interactive my_container apt update
+# Устанавливаем php
+docker exec --tty --interactive my_container apt install php7.0-cli
+
+# Запускаем php-сервер на 80 порту контейнера
+docker exec --tty --interactive my_container php -S 0.0.0.0:80 -t /my_volume/
+
+curl -s http://127.0.0.1:3132 
+PHP 7.0.33-0+deb9u3 is the best!
+
+echo "<?php print_r($_SERVER); ?>" > ./volume/test.php
+curl -s http://127.0.0.1:3132/test.php
+
+
+================================================ Собираем образ (image) ================================================
+
+# собрать образ 
+docker build -t my_image:1.0.1 .
+
+# Сначала удаляем старый контейнер
+docker rm -f my_container
+
+# Запускаем новый контейнер
+docker run --detach --name my_container --volume  ./volume::/var/www/html/ --publish=3132:80 my_image:1.0.1
+
+docker run -itd --privileged --name web-1 --publish=8080:80 apache-php-web
+
+docker run -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:rw -p 8080:80 apache-php-web /sbin/init
+
+
+docker exec my_container sh -c find / -name "php*"
+find . -type f -name "*.php"
+find / -name "php"
+
+docker exec -it my_container sh
+php -v
+
+
+netstat -aon | findstr :80
+  TCP    0.0.0.0:80             0.0.0.0:0              LISTENING       4
+  TCP    192.168.1.35:52814     184.86.11.11:80        ESTABLISHED     7364
+  TCP    192.168.1.35:54291     34.107.221.82:80       ESTABLISHED     16708
+  TCP    192.168.1.35:54319     34.107.221.82:80       ESTABLISHED     16708
+  TCP    [::]:80
+  
+tasklist /FI "PID eq 4" 

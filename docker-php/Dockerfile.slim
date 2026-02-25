@@ -1,0 +1,20 @@
+FROM debian:bookworm
+#FROM debian:stretch-slim
+
+RUN echo "<?php echo PHP_VERSION . PHP_EOL ?>" > index.php
+
+# for slim Debian container images
+#RUN echo 'deb http://archive.debian.org/debian stretch main contrib non-free' > /etc/apt/sources.list
+
+# for full Debian distro container images
+RUN echo 'deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main' > /etc/apt/sources.list.d/php.list
+
+# Устанавливаем php + очистка системы
+RUN apt-get update; apt-get install -y php7.0-cli; \
+	apt-get install -y sudo; apt-get install -y nano; apt-get install -y findutils; \
+    apt-get clean && rm -rf /tmp/* /var/lib/apt/lists/*
+
+# Указываем точкой входа консольный сервер php
+#ENTRYPOINT ["php7.0", "-S", "0.0.0.0:80", "-t", "."]
+CMD ["tail", "-f", "/dev/null"]
+#CMD ["/bin/sh"] 
