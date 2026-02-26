@@ -179,10 +179,6 @@ docker run -d --privileged -ti -v /sys/fs/cgroup:/sys/fs/cgroup:ro IMAGE_NAME /s
 
 ENTRYPOINT ["/sbin/init"]
 
-
-
-
-
 // listen on a default Unix socket
 curl -X POST --unix-socket /var/run/docker.sock "http://localhost/v1.53/containers/web-1/stop"
 
