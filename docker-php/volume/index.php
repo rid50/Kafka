@@ -1,1 +1,1 @@
-"<?php echo 'PHP ' . PHP_VERSION ?>' is the best!\n';" 
+"<?php echo 'PHP ' . PHP_VERSION ?>' is the best!!!\n';" 
