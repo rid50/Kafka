@@ -8,6 +8,7 @@ services:
     #image: wurstmeister/kafka  
     #image: bitnami/kafka:latest
     image: apache/kafka:latest
+    #image: apache/kafka:4.1.1
     #image: apache/kafka-native:4.1.1
     #build:
      # context: .
@@ -17,6 +18,8 @@ services:
 #        FROM alpine:latest
 #        RUN apk add --no-cache nano    
     container_name: broker
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"    
     ports:
       - "9092:9092"
     volumes:
@@ -65,8 +68,9 @@ services:
       - kafka-net
   
   init-kafka:
+    #image: apache/kafka:4.1.1  
     image: apache/kafka:latest
-   #image: apache/kafka-native:4.1.1    
+    #image: apache/kafka-native:4.1.1    
     networks:
       - kafka-net    
     depends_on:
@@ -97,8 +101,8 @@ services:
       #kafka:
         #condition: service_healthy
         condition: service_started      
-    environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    #environment:
+     # SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
      # SPRING_PROFILES_ACTIVE: prod
     networks:
       - kafka-net

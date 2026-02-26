@@ -1,3 +1,6 @@
+mvn spring-boot:build-image
+mvn spring-boot:run
+
 ./mvnw clean package
 docker-compose up --build --remove-orphans
 docker compose up -d
@@ -139,11 +142,54 @@ echo "<?php echo PHP_VERSION . PHP_EOL ?>" | docker exec --interactive my_contai
 /usr/lib/systemd/system/docker.service or
 /lib/systemd/system/docker.service
 
+ls -l /lib/systemd/system/docker.service
+
 sudo systemctl list-units --type=service | grep docker // to list the actual name of the Docker service unit.
 systemctl status docker.service
 systemctl status hwclock
 systemctl list-units --type=service --all
 
+/etc/docker/daemon.json
 
 // OpenRC is an init system
+docker exec my_container /bin/bash service --status-all
+
+docker exec my_container sh -c sudo
+
+docker exec my_container sh -c find / -name "php*"
+find . -type f -name "*.php"
+find / -name "php*"
+
+docker exec -it my_container sh
 service --status-all
+
+netstat -aon | findstr :80
+  TCP    0.0.0.0:80             0.0.0.0:0              LISTENING       4
+  TCP    192.168.1.35:52814     184.86.11.11:80        ESTABLISHED     7364
+  TCP    192.168.1.35:54291     34.107.221.82:80       ESTABLISHED     16708
+  TCP    192.168.1.35:54319     34.107.221.82:80       ESTABLISHED     16708
+  TCP    [::]:80
+  
+tasklist /FI "PID eq 4"  
+
+
+docker run -d --privileged -ti -v /sys/fs/cgroup:/sys/fs/cgroup:ro IMAGE_NAME /sbin/init
+
+ENTRYPOINT ["/sbin/init"]
+
+// listen on a default Unix socket
+curl -X POST --unix-socket /var/run/docker.sock "http://localhost/v1.53/containers/web-1/stop"
+
+// listen on a TCP socket
+curl -X POST "http://localhost:2375/containers/apache-php-web-1/start"
+curl -X POST "http://localhost:2375/containers/apache-php-web-1/stop"
+
+# Check container logs
+curl --unix-socket /var/run/docker.sock "http://localhost/v1.44/containers/CONTAINER_ID_OR_NAME/logs?stdout=1"
+
+# Inspect container status
+curl -s --unix-socket /var/run/docker.sock "http://localhost/v1.44/containers/CONTAINER_ID_OR_NAME/json" | jq '.State.Status'
+
+
+docker compose down
+ocker volume prune

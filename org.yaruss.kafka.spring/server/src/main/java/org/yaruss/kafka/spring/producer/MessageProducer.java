@@ -21,7 +21,7 @@ public class MessageProducer {
     public static final String GREEN = "\u001B[32m";
     public static final String RED = "\u001B[31m";	
 	
-	private boolean isEnabled = false;
+	private boolean isEnabled = true;
 	
 	@Value("${kafka.input.topic}")
 	private String kafkaInputTopic;
