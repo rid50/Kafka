@@ -8,9 +8,6 @@ docker-compose config
 //stop the containers
 docker-compose down
 
-http://localhost:8080
-
-
 # move to another machine
 docker stop geoplugin-service
 docker commit geoplugin-service geoplugin-service
