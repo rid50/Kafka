@@ -17,6 +17,9 @@ Start Kafka: C:\kafka_2.13-3.9.0\bin\windows\kafka-server-start.bat C:\kafka_2.1
 
 Kafka with KRaft (run from a host machine)
 -----------------
+
+del C:\kafka_2.13-3.9.0\kafka-logs
+
 cd c:\kafka_2.13-3.9.0
 .\bin\windows\kafka-server-start.bat .\config\kraft\server.properties
 
@@ -32,10 +35,10 @@ Copy the UUID output from previous step
 set KAFKA_CLUSTER_ID=5PK8UqqHTH-sm1yLhtyIPw
 
 Format Log Directories:
-C:\kafka_2.13-3.9.0\bin\windows\kafka-storage.bat format --standalone -t $KAFKA_CLUSTER_ID -c c:\kafka_2.13-3.9.0\config\kraft\server.properties
+.\bin\windows\kafka-storage.bat format -t $KAFKA_CLUSTER_ID -c .\config\kraft\server.properties
 
 Start the Kafka Server:
-C:\kafka_2.13-3.9.0\bin\windows\kafka-server-start.bat C:\kafka_2.13-3.9.0\config\kraft\server.properties
+.\bin\windows\kafka-server-start.bat .\config\kraft\server.properties
 
 -----------------------------------------------------------------
 
