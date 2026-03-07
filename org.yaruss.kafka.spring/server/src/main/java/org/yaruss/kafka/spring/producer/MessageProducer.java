@@ -61,8 +61,8 @@ public class MessageProducer {
     //     this.imageRepository = imageRepository;
     // }
 
-	// @Autowired
-	// private GreetingService greetingService;
+	@Autowired
+	private GreetingService greetingService;
 
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
@@ -88,13 +88,14 @@ public class MessageProducer {
 //System.out.println("7777777777777777777777: ", s);					
 	//@Bean
 	//@Scheduled(fixedRate = 1000)
-	//@PostConstruct
+	@PostConstruct
 	//public void produce(KafkaTemplate<String, String> kafkaTemplate) {	
 	public void produce() {
 		if (isEnabled) {
-			System.out.println(RED + "Producer: ****************************************************************" + RESET);		
+			String separator = RED + "Producer: ****************************************************************" + RESET;
+			System.out.println(separator);		
 			String msg = greetingService.greet();
-/*
+
     		List<ImageDTO> images = imageService.getAllImages();					
 			//String msg = "aaa";
 			//System.out.println(RED + "Greeting Message :: " + msg + RESET);
@@ -107,6 +108,7 @@ public class MessageProducer {
 				for (ImageDTO image : images) {
 					jsonString = mapper.writeValueAsString(image);
 					base64.add(Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8)));
+					base64.add(separator);
 				}
 			} catch (Exception e) {
 				throw new RuntimeException("Error converting DTO to base64 string: ", e);
@@ -115,8 +117,8 @@ public class MessageProducer {
 			System.out.println(RED + "Message :: " + base64 + RESET);
 			
 			this.kafkaTemplate.send(kafkaInputTopic, String.join(", ", base64));
-*/			
-			this.kafkaTemplate.send(kafkaInputTopic, msg);
+			
+			//this.kafkaTemplate.send(kafkaInputTopic, msg);
 		}
 	}
 }

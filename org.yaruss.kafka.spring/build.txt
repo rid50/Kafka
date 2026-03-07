@@ -48,6 +48,7 @@ docker run -e CLUSTER_ID="my_value" -d --name <container_name> <image_name>
 .\bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
 
 .\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --topic yaruss-input
+.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --topic yaruss-output
 
 docker exec -i <container_name_or_id> /bin/sh < ./your_script.sh
 

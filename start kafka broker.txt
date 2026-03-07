@@ -2,7 +2,7 @@ In case of error
 ERROR Exiting Kafka due to fatal exception (kafka.Kafka$)
 java.lang.RuntimeException: No readable meta.properties files found.
 
-del C:\kafka_2.13-3.9.0\kafka-logs
+del C:\kafka_2.13-3.9.0\kraft-combined-logs
 
 format the Storage Directory:	
 .\bin\windows\kafka-storage.bat random-uuid
@@ -35,7 +35,7 @@ Copy the UUID output from previous step
 set KAFKA_CLUSTER_ID=5PK8UqqHTH-sm1yLhtyIPw
 
 Format Log Directories:
-.\bin\windows\kafka-storage.bat format -t $KAFKA_CLUSTER_ID -c .\config\kraft\server.properties
+.\bin\windows\kafka-storage.bat format --standalone -t $KAFKA_CLUSTER_ID -c .\config\kraft\server.properties
 
 Start the Kafka Server:
 .\bin\windows\kafka-server-start.bat .\config\kraft\server.properties
