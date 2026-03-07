@@ -103,20 +103,29 @@ public class MessageProducer {
 			ObjectMapper mapper = new ObjectMapper();
 			
 			String jsonString;
-			List<String> base64 = new ArrayList<String>();
+			//StringBuilder imageBase64 = new StringBuilder();
+
+			//List<String> imageBase64 = new ArrayList<String>();
+			String imageBase64;
+			
 			try {
 				for (ImageDTO image : images) {
 					jsonString = mapper.writeValueAsString(image);
-					base64.add(Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8)));
-					base64.add(separator);
-				}
+					imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
+					//imageBase64.append(separator);
+					this.kafkaTemplate.send(kafkaInputTopic, imageBase64);					
+				}				
+
+				//jsonString = mapper.writeValueAsString((ImageDTO)images.get(0));
+				//imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
 			} catch (Exception e) {
 				throw new RuntimeException("Error converting DTO to base64 string: ", e);
 			}
 
-			System.out.println(RED + "Message :: " + base64 + RESET);
+			//System.out.println(RED + "Message :: " + imageBase64.toString() + RESET);
 			
-			this.kafkaTemplate.send(kafkaInputTopic, String.join(", ", base64));
+			//this.kafkaTemplate.send(kafkaInputTopic, String.join("\r\n", imageBase64));
+			//this.kafkaTemplate.send(kafkaInputTopic, imageBase64.toString());
 			
 			//this.kafkaTemplate.send(kafkaInputTopic, msg);
 		}
