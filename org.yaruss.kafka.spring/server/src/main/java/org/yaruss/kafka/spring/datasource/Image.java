@@ -44,7 +44,8 @@ public class Image {
 	// @GeneratedValue(strategy=GenerationType.AUTO)
 	Integer id;
 
-	String description;
+    @Column(name = "description")
+	String title;
 	
     @Column(name = "image")	
 	String filePath;

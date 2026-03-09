@@ -50,7 +50,7 @@ public class ImageDTO {
 	
 	public int id;
 	
-	private String description;
+	private String title;
 	
 	@Transient
 	@JsonIgnore
@@ -63,7 +63,8 @@ System.out.println("============================================= File path: " +
 		this.fileContent = getFileContent(filePath);		
 	}
  	
- 	//@Builder.Default
+	@Transient
+	@JsonIgnore
 	@Setter(AccessLevel.NONE)
 	private byte[] fileContent;
 	//private byte[] fileContent = getFileContent(filePath);	
@@ -71,11 +72,11 @@ System.out.println("============================================= File path: " +
 	
 	public byte[] getFileContent(String filePath) {
 	//public FileContent fc = (filePath) -> {
-		System.out.println("***************************************** File path: " + filePath);
+		//System.out.println("***************************************** File path: " + filePath);
 		//logger.info("fFile path: " + filePath);
 		try {
 			File myFile = new File("c:/projects/upload_folder/" + filePath);
-		System.out.println("%%%%%%%%%: " + myFile.toPath());
+		//System.out.println("%%%%%%%%%: " + myFile.toPath());
 
 			//Path path = Paths.get(filePathString);
 			//byte[] byteArray = new byte[(int) myFile.length()];

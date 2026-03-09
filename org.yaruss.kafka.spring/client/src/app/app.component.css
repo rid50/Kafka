@@ -1,0 +1,36 @@
+.tableLayout {
+  border: 1px solid #ccc;
+
+  max-height: 300px; /* Set a maximum height to enable scrolling */
+
+  /* Set a fixed height for vertical scrolling */
+  height: 420px;
+  /* or a dynamic height using viewport units like 50vh */
+  
+  /* Set a width if needed for horizontal scrolling */
+  width: 50%; 
+
+  /* Enable vertical scrolling when content overflows */
+  overflow-y: auto; 
+
+  /* Enable horizontal scrolling when content overflows */
+  overflow-x: auto; 
+}
+
+table {
+    width: 50%;
+    border-collapse: collapse;
+}
+
+thead th {
+    position: sticky; /* Keeps the header fixed at the top */
+    top: 0;
+    background-color: #f1f1f1;
+    z-index: 1;
+}
+
+/* th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+} */

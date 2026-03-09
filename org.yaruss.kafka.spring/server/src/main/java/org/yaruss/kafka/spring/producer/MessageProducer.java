@@ -67,6 +67,15 @@ public class MessageProducer {
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
 
+	//@Autowired
+	private final ObjectMapper objectMapper;
+
+	@Autowired
+	public MessageProducer(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
+	}
+			
+			
     //private final KafkaTemplate<String, String> kafkaTemplate;
 	
     //@Autowired
@@ -87,8 +96,8 @@ public class MessageProducer {
     //String st = imageService.get();
 //System.out.println("7777777777777777777777: ", s);					
 	//@Bean
-	//@Scheduled(fixedRate = 1000)
-	@PostConstruct
+	@Scheduled(fixedRate = 1000)
+	//@PostConstruct
 	//public void produce(KafkaTemplate<String, String> kafkaTemplate) {	
 	public void produce() {
 		if (isEnabled) {
@@ -100,7 +109,11 @@ public class MessageProducer {
 			//String msg = "aaa";
 			//System.out.println(RED + "Greeting Message :: " + msg + RESET);
 
-			ObjectMapper mapper = new ObjectMapper();
+			//ObjectMapper mapper = new ObjectMapper();
+			
+			
+
+			
 			
 			String jsonString;
 			//StringBuilder imageBase64 = new StringBuilder();
@@ -110,14 +123,16 @@ public class MessageProducer {
 			
 			try {
 				for (ImageDTO image : images) {
-					jsonString = mapper.writeValueAsString(image);
-					imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
+					jsonString = objectMapper.writeValueAsString(image);
+					//imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
 					//imageBase64.append(separator);
-					this.kafkaTemplate.send(kafkaInputTopic, imageBase64);					
+					//this.kafkaTemplate.send(kafkaInputTopic, imageBase64);
+					this.kafkaTemplate.send(kafkaInputTopic, jsonString);					
 				}				
 
-				//jsonString = mapper.writeValueAsString((ImageDTO)images.get(0));
-				//imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
+				// jsonString = mapper.writeValueAsString((ImageDTO)images.get(0));
+				// imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
+				// this.kafkaTemplate.send(kafkaInputTopic, imageBase64);
 			} catch (Exception e) {
 				throw new RuntimeException("Error converting DTO to base64 string: ", e);
 			}

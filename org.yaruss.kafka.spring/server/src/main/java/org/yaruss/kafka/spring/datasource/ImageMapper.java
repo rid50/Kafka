@@ -27,8 +27,8 @@ public class ImageMapper {
 	
     public ImageDTO toResponse(Image image) {
 		ImageDTO dto = new ImageDTO();
-        dto.id = image.getId();
-        dto.setDescription(image.getDescription());
+        dto.setId(image.getId());
+        dto.setTitle(image.getTitle());
         dto.setFilePath(image.getFilePath());
         return dto;
     }	
