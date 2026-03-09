@@ -28,7 +28,7 @@ public class MessageConsumer {
 //	@KafkaListener(topics = "${kafka.output.topic}", groupId = "${spring.kafka.consumer.group-id}")
 	@KafkaListener(topics = "${kafka.input.topic}", groupId = "${spring.kafka.consumer.group-id}")
 	public void consumeMessage(String msg) {
-		System.out.println("Message received: " + msg);
+		//System.out.println("Message received: " + msg);
 		//this.kafkaTemplate.send(kafkaOutputTopic, msg);
 		messagingTemplate.convertAndSend(stompTopic, msg);
 	}

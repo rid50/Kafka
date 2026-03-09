@@ -71,21 +71,21 @@ export class AppComponent implements OnInit {
 		//console.log(`Received: ${message.body}`)
 		if(message.body) {
 			
-			// // Decode base64 payload
-			// const binaryString = atob(message.body);
-			// const len = binaryString.length;
-			// const bytes = new Uint8Array(len);
-			// for (let i = 0; i < len; i++) {
-			// 	bytes[i] = binaryString.charCodeAt(i);
-			// }
+ 			// Decode base64 payload
+			const binaryString = atob(message.body);
+			const len = binaryString.length;
+			const bytes = new Uint8Array(len);
+			for (let i = 0; i < len; i++) {
+				bytes[i] = binaryString.charCodeAt(i);
+			}
 
-			// // Use TextDecoder to convert byte array to a proper UTF-8 string
-			// const decoder = new TextDecoder('utf-8');
-			// const decodedString = decoder.decode(bytes);
+			// Use TextDecoder to convert byte array to a proper UTF-8 string
+			const decoder = new TextDecoder('utf-8');
+			const decodedString = decoder.decode(bytes);
 
-			//const jsonObject = JSON.parse(decodedString);
+			const jsonObject = JSON.parse(decodedString);
 
-			const jsonObject = JSON.parse(message.body);
+			//const jsonObject = JSON.parse(message.body);
 
 			//debugger;			
 			// let el: HTMLElement | null = document.getElementById('stompMsg'); 
@@ -113,6 +113,7 @@ export class AppComponent implements OnInit {
 			let newRow = tableBody.insertRow();
 			let cell1 = newRow.insertCell(0);
     		let cell2 = newRow.insertCell(1);
+    		let cell3 = newRow.insertCell(2);
 
 			let imgElement = document.getElementById("id");
 			cell1.innerHTML = jsonObject.id;
@@ -120,7 +121,10 @@ export class AppComponent implements OnInit {
 			
 			imgElement = document.getElementById("title");
 			cell2.innerHTML = jsonObject.title;
-			//(imgElement as HTMLElement).innerHTML = jsonObject.title; 
+			//(imgElement as HTMLElement).innerHTML = jsonObject.title;
+			
+			imgElement = document.getElementById("image");
+			(imgElement as HTMLImageElement).src =  "data:image/png;base64," + jsonObject.fileContent;
 			
 			//imgElement = document.getElementById("image");
 			//(imgElement as HTMLImageElement).src = jsonObject.fileContent; 

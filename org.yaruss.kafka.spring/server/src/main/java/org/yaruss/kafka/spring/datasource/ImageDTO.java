@@ -58,13 +58,13 @@ public class ImageDTO {
 	private String filePath;
 
 	public void setFilePath(String filePath) {
-System.out.println("============================================= File path: " + filePath);		
+//System.out.println("============================================= File path: " + filePath);		
 		this.filePath = filePath;
 		this.fileContent = getFileContent(filePath);		
 	}
  	
-	@Transient
-	@JsonIgnore
+	//@Transient
+	//@JsonIgnore
 	@Setter(AccessLevel.NONE)
 	private byte[] fileContent;
 	//private byte[] fileContent = getFileContent(filePath);	
