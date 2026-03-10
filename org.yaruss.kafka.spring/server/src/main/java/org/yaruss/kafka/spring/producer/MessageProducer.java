@@ -8,6 +8,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Bean;
 
+// import java.util.concurrent.Executors;
+// import java.util.concurrent.ScheduledExecutorService;
+// import java.util.concurrent.TimeUnit;
+
 import jakarta.annotation.PostConstruct;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ import org.yaruss.kafka.spring.datasource.ImageRepository;
 import java.util.List;
 import java.util.Base64;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 import java.nio.charset.StandardCharsets;
 
@@ -36,6 +41,8 @@ public class MessageProducer {
     public static final String RESET = "\u001B[0m";
     public static final String GREEN = "\u001B[32m";
     public static final String RED = "\u001B[31m";	
+
+	//private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	
 	private boolean isEnabled = true;
 	
@@ -64,14 +71,15 @@ public class MessageProducer {
 	@Autowired
 	private GreetingService greetingService;
 
-	@Autowired
-	private KafkaTemplate<String, String> kafkaTemplate;
+	//@Autowired
+	private final KafkaTemplate<String, String> kafkaTemplate;
 
 	//@Autowired
 	private final ObjectMapper objectMapper;
 
-	@Autowired
-	public MessageProducer(ObjectMapper objectMapper) {
+	//@Autowired
+	public MessageProducer(KafkaTemplate kafkaTemplate, ObjectMapper objectMapper) {
+		this.kafkaTemplate = kafkaTemplate;
 		this.objectMapper = objectMapper;
 	}
 			
@@ -96,8 +104,8 @@ public class MessageProducer {
     //String st = imageService.get();
 //System.out.println("7777777777777777777777: ", s);					
 	//@Bean
-	//@Scheduled(fixedRate = 1000)
-	@PostConstruct
+	@Scheduled(fixedDelay = 2000)
+	//@PostConstruct
 	//public void produce(KafkaTemplate<String, String> kafkaTemplate) {	
 	public void produce() {
 		if (isEnabled) {
@@ -120,18 +128,29 @@ public class MessageProducer {
 
 			//List<String> imageBase64 = new ArrayList<String>();
 			String imageBase64;
-			
-			try {
-				// for (ImageDTO image : images) {
-					// jsonString = objectMapper.writeValueAsString(image);
-					// imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
-					// this.kafkaTemplate.send(kafkaInputTopic, imageBase64);
-					// this.kafkaTemplate.send(kafkaInputTopic, jsonString);					
-				// }				
 
-				jsonString = objectMapper.writeValueAsString((ImageDTO)images.get(0));
-				imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
-				this.kafkaTemplate.send(kafkaInputTopic, imageBase64);
+			final int[] total = new int[1];
+			try {
+				for (ImageDTO image : images) {
+					jsonString = objectMapper.writeValueAsString(image);
+					imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
+					this.kafkaTemplate.send(kafkaInputTopic, imageBase64);
+					//this.kafkaTemplate.send(kafkaInputTopic, jsonString);
+					
+					// final Runnable task = () -> {
+						// IntStream.range(0, 10).forEach(i -> {
+							// total[0] += i; // Modifying the array's content is legal						
+						// });	
+					// };
+
+					// scheduler.schedule(task, 5, TimeUnit.SECONDS);
+				
+					//Thread.sleep(100);					
+				}				
+
+				// jsonString = objectMapper.writeValueAsString((ImageDTO)images.get(0));
+				// imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
+				// this.kafkaTemplate.send(kafkaInputTopic, imageBase64);
 			} catch (Exception e) {
 				throw new RuntimeException("Error converting DTO to base64 string: ", e);
 			}

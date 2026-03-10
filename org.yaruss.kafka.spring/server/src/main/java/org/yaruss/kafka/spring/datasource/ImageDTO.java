@@ -12,7 +12,7 @@ import jakarta.persistence.Transient;
 //import jakarta.persistence.*;
 
 import lombok.*;
-//import lombok.experimental.FieldDefaults;
+import lombok.experimental.FieldDefaults;
 
 // import org.slf4j.Logger;
 // import org.slf4j.LoggerFactory;
@@ -22,6 +22,10 @@ import java.nio.file.Files;
 // import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import javax.imageio.ImageIO;
+import org.imgscalr.Scalr;
 
 /* @FunctionalInterface
 //@Embeddable
@@ -34,7 +38,7 @@ interface FileContent {
 @Data
 // @AllArgsConstructor
 // @NoArgsConstructor
-//@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 //public class ImageDTO(int id, String description, String filePath) {
 public class ImageDTO {
 
@@ -47,10 +51,12 @@ public class ImageDTO {
 	
 	//@Autowired	
 	//private ImageService imageService;
+
+	//int id;
+
+	String albumTitle;
 	
-	public int id;
-	
-	private String title;
+	private String imageTitle;
 	
 	@Transient
 	@JsonIgnore
@@ -75,13 +81,29 @@ public class ImageDTO {
 		//System.out.println("***************************************** File path: " + filePath);
 		//logger.info("fFile path: " + filePath);
 		try {
-			File myFile = new File("c:/projects/upload_folder/" + filePath);
-		//System.out.println("%%%%%%%%%: " + myFile.toPath());
+			File originalFile = new File("c:/projects/upload_folder/" + filePath);
+			//return Files.readAllBytes(myFile.toPath());
+			
+			BufferedImage originalImage = ImageIO.read(originalFile);
+			
+			
+			
+		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%: " + filePath);
 
+			BufferedImage thumbnail = Scalr.resize(originalImage, 100);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(thumbnail, "png", baos); 
+			
+			//File outputFile = new File("c:/projects/upload_folder/" + filePath + "thumb.png");
+			//ImageIO.write(thumbnail, "png", outputFile);
+			
+			byte[] imageBytes = baos.toByteArray();
+			return imageBytes;
+			
 			//Path path = Paths.get(filePathString);
 			//byte[] byteArray = new byte[(int) myFile.length()];
 			//if (myFile.exists()) {
-				return Files.readAllBytes(myFile.toPath());
+				//return Files.readAllBytes(myFile.toPath());
 				// setPicture(fileContent);
 				// Process the bytes (e.g., display in JLabel, send to browser)
 			//} else

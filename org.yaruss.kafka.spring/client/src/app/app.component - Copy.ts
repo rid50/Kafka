@@ -40,10 +40,10 @@ export class AppComponent implements OnInit {
 		// login: 'user',
 		// passcode: 'password',
 	  // },
-	//   debug: (str) => console.log(str),
-	//   onDisconnect: () => {
-	// 	console.log('Disconnected');
-	//   },
+	  debug: (str) => console.log(str),
+	  onDisconnect: () => {
+		console.log('Disconnected');
+	  },
 	  reconnectDelay: 5000,
 	  heartbeatIncoming: 4000,
 	  heartbeatOutgoing: 4000,
@@ -69,7 +69,14 @@ export class AppComponent implements OnInit {
 	//stompClient.connect({}, function (frame: any) {
 	  stompClient.subscribe("/topic/greeting", (message: any) => {
 		//console.log(`Received: ${message.body}`)
+debugger;		
 		if(message.body) {
+
+       //var imageObj = JSON.parse(message.body);
+        //var base64Image = imageObj.fileContent;
+
+
+
 			
  			// Decode base64 payload
 			const binaryString = atob(message.body);
@@ -85,6 +92,14 @@ export class AppComponent implements OnInit {
 
 			const jsonObject = JSON.parse(decodedString);
 
+        // Display the image in HTML
+        var imageElement = document.createElement('img');
+        imageElement.src = 'data:image/jpeg;base64,' + jsonObject.fileContent; // Adjust MIME type if necessary
+        //document.getElementById('imageContainer').appendChild(imageElement);
+		document.body.appendChild(imageElement);
+
+
+/*			
 			//const jsonObject = JSON.parse(message.body);
 
 			//debugger;			
@@ -99,7 +114,6 @@ export class AppComponent implements OnInit {
 			// var scrollInterval = setInterval(function() {
 			// 	container.scrollBy(0, 1);
 			// }, 100); 			
-			//debugger;
 
 			let tableBody = document.getElementById("tableBody") as HTMLTableElement;
 
@@ -116,46 +130,18 @@ export class AppComponent implements OnInit {
     		let cell2 = newRow.insertCell(1);
     		let cell3 = newRow.insertCell(2);
 
-			// let el: HTMLElement | null = document.getElementById('stompMsg'); 
-			// let clone = el!.cloneNode(true) as HTMLElement; 
-			// clone.style.display = 'block';
-
-			// document.body.appendChild(clone);
-
-
-			//let imgElement = document.getElementById("id");
-			cell1.innerHTML = jsonObject.albumTitle;
+			let imgElement = document.getElementById("id");
+			cell1.innerHTML = jsonObject.id;
 			//(imgElement as HTMLElement).innerHTML = jsonObject.id;
 			
-			//imgElement = document.getElementById("title");
-			cell2.innerHTML = jsonObject.imageTitle;
+			imgElement = document.getElementById("title");
+			cell2.innerHTML = jsonObject.title;
 			//(imgElement as HTMLElement).innerHTML = jsonObject.title;
 			
-			//imgElement = document.getElementById("image");
+			imgElement = document.getElementById("image");
+			(imgElement as HTMLImageElement).src =  "data:image/png;base64," + jsonObject.fileContent;
 			
-			let img = document.createElement("img");
-			img.src = "data:image/png;base64," + jsonObject.fileContent;
-			img.alt = "Thumbnail";
-			//img.height =84;
-			//img.width = 56;
-			cell3.appendChild(img);
-			
-
-
-			//(cell3 as HTMLImageElement).src =  "data:image/png;base64," + jsonObject.fileContent;
-			
-			//imgElement = document.getElementById("image");
-			//(imgElement as HTMLImageElement).src = jsonObject.fileContent; 
-			//jsonObject.
-			//const jsonString = JSON.stringify(jsonObject, null, 4);
-			//document.body.innerHTML = `<pre>${jsonString}</pre>`;
-		  //$(".msg").html(jsonString)
-
-		  //$(".msg").html(message.body)
-
-			// const base64Image = message.body;
-			// const imageElement = document.getElementById('myImage');
-			// imageElement.src = 'data:image/png;base64,' + base64Image;
+*/
 		}
 	  });
     };
