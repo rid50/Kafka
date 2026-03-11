@@ -14,7 +14,7 @@
   overflow-y: auto; 
 
   /* Enable horizontal scrolling when content overflows */
-  overflow-x: auto; 
+  /* overflow-x: auto;  */
 }
 
 table {

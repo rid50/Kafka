@@ -26,10 +26,24 @@ export class AppComponent implements OnInit {
     //this.connection();
   }
   
+	isHovered = false;
+
+	tableBody: any = null;
+	//tableBody = document.getElementById("tableBody") as HTMLTableElement;
+	//this.tableBody.addEventListener('mouseenter', () => this.isHovered = true);
+	// this.tableBody.addEventListener('mouseleave', () => this.isHovered = false);
+
+	//that = this; 
   ngOnInit() {
+
+	this.tableBody = document.getElementById("tableBody") as HTMLTableElement;
+	this.tableBody.addEventListener('mouseenter', () => this.isHovered = true);
+	this.tableBody.addEventListener('mouseleave', () => this.isHovered = false);
+
 	this.title.setTitle('Angular Spring Websocket');
 	 
-  //"request URL too long" (HTTP 414 error)
+	let that = this; 
+
 //debugger; 
 	const stompClient = new Client({
 	  // For SockJS, set a factory that creates a new SockJS instance
@@ -66,6 +80,10 @@ export class AppComponent implements OnInit {
 	}
 
 	stompClient.onConnect = function (frame) {
+	  let isHovered = false;
+	  //const tableBody = document.getElementById("tableBody") as HTMLTableElement;
+	  //tableBody.addEventListener('mouseenter', () => isHovered = true);
+	  //tableBody.addEventListener('mouseleave', () => isHovered = false);		
 	//stompClient.connect({}, function (frame: any) {
 	  stompClient.subscribe("/topic/greeting", (message: any) => {
 		//console.log(`Received: ${message.body}`)
@@ -101,7 +119,7 @@ export class AppComponent implements OnInit {
 			// }, 100); 			
 			//debugger;
 
-			let tableBody = document.getElementById("tableBody") as HTMLTableElement;
+			// let tableBody = document.getElementById("tableBody") as HTMLTableElement;
 
 			// if (tableBody instanceof HTMLTableElement) {
     		// 	const newRow = tableBody.insertRow();
@@ -111,7 +129,7 @@ export class AppComponent implements OnInit {
 			// console.error("The element found is not a table element.");
 			// }
 
-			let newRow = tableBody.insertRow();
+			let newRow = that.tableBody.insertRow();
 			let cell1 = newRow.insertCell(0);
     		let cell2 = newRow.insertCell(1);
     		let cell3 = newRow.insertCell(2);
@@ -140,7 +158,9 @@ export class AppComponent implements OnInit {
 			//img.width = 56;
 			cell3.appendChild(img);
 			
-
+			//startAutoScroll(that.tableBody);
+			//triggerScroll(newRow, isHovered);
+			newRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
 			//(cell3 as HTMLImageElement).src =  "data:image/png;base64," + jsonObject.fileContent;
 			
@@ -160,6 +180,41 @@ export class AppComponent implements OnInit {
 	  });
     };
 
+	let scrollInterval;
+
+	function startAutoScroll(element: HTMLTableElement) {
+		// element.animate({
+		// 	scrollTop: element.get(0).scrollHeight
+		// }, 1000);
+
+		// element.scrollTop = element.scrollHeight;
+		scrollInterval = setInterval(() => {
+			//newRow.scrollTo({ top: 100, behavior: 'smooth' })
+			element.scrollTop += 1;
+
+			// If reached bottom, reset to top
+			if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
+				element.scrollTop = 0;
+			}			
+		}, 20); // Adjust speed
+	}
+	
+	
+// // Stop on hover
+// tableBody.addEventListener('mouseenter', () => {
+//     clearInterval(scrollInterval);
+// });
+
+// // Resume on hover out
+// container.addEventListener('mouseleave', () => {
+//     startAutoScroll();
+// });	
+	function triggerScroll(element: HTMLTableRowElement, isHovered: boolean) {
+	  if (!isHovered) {
+		element.scrollIntoView({ behavior: 'smooth' });
+	  }
+	}
+
 	stompClient.onStompError = function (frame) {
 	  // Invoked in case of an error reported by the broker
 	  // Bad login/passcode typically causes an error
@@ -173,44 +228,5 @@ export class AppComponent implements OnInit {
   }
 
 
-/* const socket = new WebSocket('ws://localhost:8080/websocket');
-const stompClient = Stomp.over(socket);
-
-stompClient.connect({}, function (frame: any) {
-    console.log('Connected: ' + frame);
-	  client.subscribe("/topic/greeting", (message: any) => {
-    // 2. Subscribe to the image topic
-    stompClient.subscribe('/topic/image', function (message) {
-        // 3. Handle the incoming message
-        // Assumes message.body is base64 encoded string
-        const base64Image = message.body;
-        const imageElement = document.getElementById('myImage');
-        imageElement.src = 'data:image/png;base64,' + base64Image;
-    });
-}); */
-
-
-
-
-  // connection(){
-	// const client = new Client({
-	  // brokerURL: 'ws://localhost:8080/websocket',
-	  // onConnect: () => {
-		// client.subscribe("/topic/greeting", (message: any) => {
-		  // console.log(`Received: ${message.body}`)
-		  // if(message.body) {
-			// $(".msg").html(message.body)
-		  // }
-		// });		  
-		// client.publish({ destination: '/topic/test01', body: 'First Message' });
-	  // },
-	  // onDisconnect: () => {
-		// console.log('Disconnected');
-	  // },	  
-	// });
-
-	// client.activate();	
-	  
-  // }
  
 }

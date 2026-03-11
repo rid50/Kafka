@@ -26,7 +26,7 @@ import org.yaruss.kafka.spring.datasource.ImageRepository;
 import java.util.List;
 import java.util.Base64;
 import java.util.ArrayList;
-import java.util.stream.IntStream;
+//import java.util.stream.IntStream;
 
 import java.nio.charset.StandardCharsets;
 
@@ -68,20 +68,20 @@ public class MessageProducer {
     //     this.imageRepository = imageRepository;
     // }
 
-	@Autowired
-	private GreetingService greetingService;
+	//@Autowired
+	//private GreetingService greetingService;
 
 	//@Autowired
-	private final KafkaTemplate<String, String> kafkaTemplate;
+	//private KafkaTemplate<String, String> kafkaTemplate;
 
 	//@Autowired
-	private final ObjectMapper objectMapper;
+	//private ObjectMapper objectMapper;
 
 	//@Autowired
-	public MessageProducer(KafkaTemplate kafkaTemplate, ObjectMapper objectMapper) {
-		this.kafkaTemplate = kafkaTemplate;
-		this.objectMapper = objectMapper;
-	}
+	// public MessageProducer(KafkaTemplate kafkaTemplate, ObjectMapper objectMapper) {
+		// this.kafkaTemplate = kafkaTemplate;
+		// this.objectMapper = objectMapper;
+	// }
 			
 			
     //private final KafkaTemplate<String, String> kafkaTemplate;
@@ -104,8 +104,8 @@ public class MessageProducer {
     //String st = imageService.get();
 //System.out.println("7777777777777777777777: ", s);					
 	//@Bean
-	@Scheduled(fixedDelay = 2000)
-	//@PostConstruct
+	//@Scheduled(fixedDelay = 2000)
+	@PostConstruct
 	//public void produce(KafkaTemplate<String, String> kafkaTemplate) {	
 	public void produce() {
 		if (isEnabled) {
@@ -113,14 +113,16 @@ public class MessageProducer {
 			//System.out.println(separator);		
 			//String msg = greetingService.greet();
 
-    		List<ImageDTO> images = imageService.getAllImages();					
+    		//List<ImageDTO> images = imageService.getAllImages();
+			imageService.processImagesByPage();
+			
 			//String msg = "aaa";
 			//System.out.println(RED + "Greeting Message :: " + msg + RESET);
 
 			//ObjectMapper mapper = new ObjectMapper();
 			
 			
-
+/*
 			
 			
 			String jsonString;
@@ -129,7 +131,7 @@ public class MessageProducer {
 			//List<String> imageBase64 = new ArrayList<String>();
 			String imageBase64;
 
-			final int[] total = new int[1];
+			//final int[] total = new int[1];
 			try {
 				for (ImageDTO image : images) {
 					jsonString = objectMapper.writeValueAsString(image);
@@ -154,7 +156,7 @@ public class MessageProducer {
 			} catch (Exception e) {
 				throw new RuntimeException("Error converting DTO to base64 string: ", e);
 			}
-
+*/
 			//System.out.println(RED + "Message :: " + imageBase64.toString() + RESET);
 			
 			//this.kafkaTemplate.send(kafkaInputTopic, String.join("\r\n", imageBase64));

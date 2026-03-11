@@ -1,11 +1,13 @@
 package org.yaruss.kafka.spring.datasource;
 
+import org.springframework.stereotype.Service;
 // import java.util.stream.Stream;
 // import java.util.stream.Collectors;
 
-import lombok.experimental.UtilityClass;
+//import lombok.experimental.UtilityClass;
 
-@UtilityClass
+//@UtilityClass
+@Service
 public class ImageMapper {
 
     // public ImageDTO toResponse(Image image) {
