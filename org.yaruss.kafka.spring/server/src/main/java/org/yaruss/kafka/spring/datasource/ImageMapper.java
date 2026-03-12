@@ -35,5 +35,19 @@ public class ImageMapper {
         dto.setImageTitle(image.getTitle());
         dto.setFilePath(image.getFilePath());
         return dto;
+    }
+
+    public Image toEntity(ImageDTO dto) {
+		Image image = new Image();
+		//Album album = new Album();
+		//album.setCover_image("");
+		//image.setAlbum(album);
+
+		//image.setAlbum(new Album().setId(1));
+		//image.setAlbum(new Album().setId(4).setTitle(dto.getAlbumTitle()+ "153").setName("153").setCover_image(""));
+		image.setAlbum(new Album().setTitle(dto.getAlbumTitle()+ "153").setName("153").setCover_image(""));
+        image.setTitle(dto.getImageTitle());
+		image.setFilePath("");
+        return image;
     }	
 }

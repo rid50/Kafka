@@ -104,8 +104,8 @@ public class MessageProducer {
     //String st = imageService.get();
 //System.out.println("7777777777777777777777: ", s);					
 	//@Bean
-	//@Scheduled(fixedDelay = 2000)
-	@PostConstruct
+	@Scheduled(fixedDelay = 2000)
+	//@PostConstruct
 	//public void produce(KafkaTemplate<String, String> kafkaTemplate) {	
 	public void produce() {
 		if (isEnabled) {
@@ -163,6 +163,8 @@ public class MessageProducer {
 			//this.kafkaTemplate.send(kafkaInputTopic, imageBase64.toString());
 			
 			//this.kafkaTemplate.send(kafkaInputTopic, msg);
+		} else {
+			imageService.createNewImage("Album", "Title");
 		}
 	}
 }

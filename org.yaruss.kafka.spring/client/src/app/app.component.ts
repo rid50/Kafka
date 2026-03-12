@@ -142,7 +142,11 @@ export class AppComponent implements OnInit {
 
 
 			//let imgElement = document.getElementById("id");
-			cell1.innerHTML = jsonObject.albumTitle;
+			let span = document.createElement("span");
+			//span.style.width = "300px";
+			span.innerHTML = jsonObject.albumTitle;
+			cell1.appendChild(span);
+
 			//(imgElement as HTMLElement).innerHTML = jsonObject.id;
 			
 			//imgElement = document.getElementById("title");
@@ -160,7 +164,7 @@ export class AppComponent implements OnInit {
 			
 			//startAutoScroll(that.tableBody);
 			//triggerScroll(newRow, isHovered);
-			newRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
+			//newRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
 			//(cell3 as HTMLImageElement).src =  "data:image/png;base64," + jsonObject.fileContent;
 			

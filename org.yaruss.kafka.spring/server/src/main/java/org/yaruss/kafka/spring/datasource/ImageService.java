@@ -2,6 +2,7 @@ package org.yaruss.kafka.spring.datasource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -117,9 +118,11 @@ public class ImageService {
 				ImageDTO imageDTO = imageMapper.toResponse(image);
 				
 				//Class<?> objectClass = image.getClass();
-
 				//System.out.println("******************************* The type of the object is: *******************" + objectClass.getName());
 				// // Output: org.yaruss.kafka.spring.datasource.Image
+
+
+					
 				try {
 /*					
 					for (ImageDTO image : images) {
@@ -144,16 +147,32 @@ public class ImageService {
 					imageBase64.set(Base64.getEncoder().encodeToString(jsonString.get().getBytes(StandardCharsets.UTF_8)));
 					this.kafkaTemplate.send(kafkaInputTopic, imageBase64.get());
 					
-					//Thread.sleep(1000);
+					//Thread.sleep(100);	
 					
 				} catch (Exception e) {
 					throw new RuntimeException("Error converting DTO to base64 string: ", e);
-				}				
+				}	
+
+			
             });
 
             pageNumber++;
         } while (imageSlice.hasNext()); // Check if there are more pages
+		
+		
     }
+	
+	@Transactional
+    public Image createNewImage(String album, String title) {
+        ImageDTO dto = new ImageDTO();
+        dto.setAlbumTitle(album);
+        dto.setImageTitle(title);
+
+		Image image = imageMapper.toEntity(dto);
+		
+        // The save method handles both insert (new entity) and update (existing entity)
+        return imageRepository.save(image);
+    }	
 
 
 

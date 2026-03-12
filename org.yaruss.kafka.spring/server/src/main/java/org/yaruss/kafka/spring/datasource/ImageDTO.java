@@ -36,23 +36,18 @@ interface FileContent {
 //@Component
 // @Builder
 @Data
-// @AllArgsConstructor
-// @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 //public class ImageDTO(int id, String description, String filePath) {
 public class ImageDTO {
 
-	// public ImageDTO() {
-	// 	this.id = 0;
-
-	// }
-	//@Exclude
     //private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	//@Autowired	
 	//private ImageService imageService;
 
-	//int id;
+	int id;
 
 	String albumTitle;
 	
@@ -77,6 +72,9 @@ public class ImageDTO {
 	
 	
 	public byte[] getFileContent(String filePath) {
+		if (filePath == null || filePath.isEmpty()) return new byte[1];
+			
+			
 	//public FileContent fc = (filePath) -> {
 		//System.out.println("***************************************** File path: " + filePath);
 		//logger.info("fFile path: " + filePath);
