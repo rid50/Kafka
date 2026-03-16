@@ -72,8 +72,8 @@ public class ImageDTO {
 	
 	
 	public byte[] getFileContent(String filePath) {
-		if (filePath == null || filePath.isEmpty()) return new byte[1];
-			
+		//if (filePath == null || filePath.isEmpty()) return new byte[1];
+		if (filePath == null || filePath.isEmpty()) return new byte[0];			
 			
 	//public FileContent fc = (filePath) -> {
 		//System.out.println("***************************************** File path: " + filePath);

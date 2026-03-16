@@ -36,7 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 //@Service
 //@RequiredArgsConstructor
-@EnableScheduling
+//@EnableScheduling
 public class MessageProducer {
     // ANSI escape code constants
     public static final String RESET = "\u001B[0m";
@@ -61,12 +61,12 @@ public class MessageProducer {
 		// this.scheduledTaskExecutor = scheduledTaskExecutor;
 	// }
 	
-	public void enableSheduling() {
-		isEnabled = true;
+	public void start() {
+		imageService.startTask();
 	}
 
-	public void disableSheduling() {
-		isEnabled = false;
+	public void stop() {
+		imageService.stopTask();
 	}
 
 	//@Scheduled(fixedDelay = 2000)
@@ -84,7 +84,7 @@ public class MessageProducer {
 			
 
 		} else {
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < 50; i++)
 				imageService.createNewImage("Album" + i, "Title" + i);
 		}
 	}

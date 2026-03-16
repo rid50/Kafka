@@ -37,8 +37,6 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import java.time.Duration;
-//import java.util.ArrayList;
-//import java.util.stream.IntStream;
 
 import java.nio.charset.StandardCharsets;
 
@@ -69,6 +67,8 @@ public class ImageService {
 	private long fixedDelay = 2000L;
 
 	private int pageNumber = 0;
+
+	private boolean finishedProcess = false;
 	
 	public void processImagesByPage() {
 		int pageSize = 1;
@@ -127,7 +127,7 @@ public class ImageService {
 		
 		pageNumber++;
 
-		if (!imageSlice.hasNext()) {stopTask();}
+		if (!imageSlice.hasNext()) {finishedProcess = true; stopTask();}
 
 	}
 	
@@ -138,8 +138,13 @@ public class ImageService {
 
         // scheduledTask = taskScheduler.scheduleWithFixedDelay(task, delay);
 		
-		if (scheduledTask != null && !scheduledTask.isCancelled()) {
-			scheduledTask.cancel(false); // Cancel any existing task
+		if (scheduledTask != null && scheduledTask.isCancelled()) {
+			if (finishedProcess) {
+				pageNumber = 0;
+				finishedProcess = false;
+			}
+				
+			//scheduledTask.cancel(false); // Cancel any existing task	?????
 		}
 		
 		scheduledTask = taskScheduler.scheduleWithFixedDelay(new ScheduledTaskExecutor(), fixedDelay);
@@ -151,9 +156,7 @@ public class ImageService {
 			boolean canceled = scheduledTask.cancel(true);
 
 			if (canceled) {
-				System.out.println("Scheduled task stopped.");
-			} else {
-				System.out.println("Task was already stopped or could not be cancelled.");
+				System.out.println("Task stopped.");
 			}
 		}
 	}	
