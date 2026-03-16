@@ -57,8 +57,8 @@ public class Image {
     @Column(name = "image")	
 	String filePath;
 	
-	//@ManyToOne(cascade = CascadeType.MERGE) // Do not create parent Album, provided the Id for the Album is set, add child Image
-	@ManyToOne(cascade = CascadeType.PERSIST) // Create parent Album, provided the Id for the Album is not set with GenerationType.IDENTITY or set without strategy, add child Image
+	@ManyToOne(cascade = CascadeType.MERGE) // Do not create parent Album, provided the Id for the Album is set, add child Image
+	//@ManyToOne(cascade = CascadeType.PERSIST) // Create parent Album, provided the Id for the Album is not set with GenerationType.IDENTITY or set without strategy, add child Image
     @JoinColumn(name = "album_id") // Specifies the foreign key column name	
 	Album album;	
 }

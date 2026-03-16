@@ -43,9 +43,9 @@ public class ImageMapper {
 		//album.setCover_image("");
 		//image.setAlbum(album);
 
-		//image.setAlbum(new Album().setId(1));
+		image.setAlbum(new Album().setId(9));
 		//image.setAlbum(new Album().setId(4).setTitle(dto.getAlbumTitle()+ "153").setName("153").setCover_image(""));
-		image.setAlbum(new Album().setTitle(dto.getAlbumTitle()+ "153").setName("153").setCover_image(""));
+		//image.setAlbum(new Album().setTitle(dto.getAlbumTitle()+ "153").setName("153").setCover_image(""));
         image.setTitle(dto.getImageTitle());
 		image.setFilePath("");
         return image;

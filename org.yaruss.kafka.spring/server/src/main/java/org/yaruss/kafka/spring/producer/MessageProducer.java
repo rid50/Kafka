@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 //import org.springframework.stereotype.Service;
 
 import org.yaruss.kafka.spring.service.GreetingService;
+//import org.yaruss.kafka.spring.datasource.ScheduledTaskExecutor;
 import org.yaruss.kafka.spring.datasource.ImageService;
 import org.yaruss.kafka.spring.datasource.ImageDTO;
 import org.yaruss.kafka.spring.datasource.ImageRepository;
@@ -26,7 +27,7 @@ import org.yaruss.kafka.spring.datasource.ImageRepository;
 import java.util.List;
 import java.util.Base64;
 import java.util.ArrayList;
-//import java.util.stream.IntStream;
+
 
 import java.nio.charset.StandardCharsets;
 
@@ -46,51 +47,19 @@ public class MessageProducer {
 	
 	private boolean isEnabled = true;
 	
-	@Value("${kafka.input.topic}")
-	private String kafkaInputTopic;
+	// @Value("${kafka.input.topic}")
+	// private String kafkaInputTopic;
 
-	// @Autowired	
-	// private ImageService imageService;
 	
 	@Autowired	
 	private ImageService imageService;
 
-    //@Autowired
-    // public MessageProducer(ImageService imageService) {
-    //     this.imageService = imageService;
-    // }	
+	// @Autowired	
+	// private ScheduledTaskExecutor scheduledTaskExecutor;
 
-
-	// private final ImageRepository imageRepository;
-
-    // //@Autowired
-    // public MessageProducer(ImageRepository imageRepository) {
-    //     this.imageRepository = imageRepository;
-    // }
-
-	//@Autowired
-	//private GreetingService greetingService;
-
-	//@Autowired
-	//private KafkaTemplate<String, String> kafkaTemplate;
-
-	//@Autowired
-	//private ObjectMapper objectMapper;
-
-	//@Autowired
-	// public MessageProducer(KafkaTemplate kafkaTemplate, ObjectMapper objectMapper) {
-		// this.kafkaTemplate = kafkaTemplate;
-		// this.objectMapper = objectMapper;
+	// public MessageProducer(ScheduledTaskExecutor scheduledTaskExecutor) {
+		// this.scheduledTaskExecutor = scheduledTaskExecutor;
 	// }
-			
-			
-    //private final KafkaTemplate<String, String> kafkaTemplate;
-	
-    //@Autowired
-    // public MessageProducer(KafkaTemplate<String, String> kafkaTemplate, ImageService imageService) {
-    //     this.kafkaTemplate = kafkaTemplate;
-	// 	this.imageService = imageService;
-    // }
 	
 	public void enableSheduling() {
 		isEnabled = true;
@@ -100,71 +69,23 @@ public class MessageProducer {
 		isEnabled = false;
 	}
 
-    //List<ImageDTO> images = imageService.getAllImages();	
-    //String st = imageService.get();
-//System.out.println("7777777777777777777777: ", s);					
-	//@Bean
-	@Scheduled(fixedDelay = 2000)
-	//@PostConstruct
-	//public void produce(KafkaTemplate<String, String> kafkaTemplate) {	
+	//@Scheduled(fixedDelay = 2000)
+	@PostConstruct
 	public void produce() {
 		if (isEnabled) {
 			//String separator = RED + "Producer: ****************************************************************" + RESET;
 			//System.out.println(separator);		
 			//String msg = greetingService.greet();
-
-    		//List<ImageDTO> images = imageService.getAllImages();
-			imageService.processImagesByPage();
-			
-			//String msg = "aaa";
-			//System.out.println(RED + "Greeting Message :: " + msg + RESET);
-
-			//ObjectMapper mapper = new ObjectMapper();
-			
-			
-/*
-			
-			
-			String jsonString;
-			//StringBuilder imageBase64 = new StringBuilder();
-
-			//List<String> imageBase64 = new ArrayList<String>();
-			String imageBase64;
-
-			//final int[] total = new int[1];
-			try {
-				for (ImageDTO image : images) {
-					jsonString = objectMapper.writeValueAsString(image);
-					imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
-					this.kafkaTemplate.send(kafkaInputTopic, imageBase64);
-					//this.kafkaTemplate.send(kafkaInputTopic, jsonString);
-					
-					// final Runnable task = () -> {
-						// IntStream.range(0, 10).forEach(i -> {
-							// total[0] += i; // Modifying the array's content is legal						
-						// });	
-					// };
-
-					// scheduler.schedule(task, 5, TimeUnit.SECONDS);
-				
-					//Thread.sleep(100);					
-				}				
-
-				// jsonString = objectMapper.writeValueAsString((ImageDTO)images.get(0));
-				// imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
-				// this.kafkaTemplate.send(kafkaInputTopic, imageBase64);
-			} catch (Exception e) {
-				throw new RuntimeException("Error converting DTO to base64 string: ", e);
-			}
-*/
-			//System.out.println(RED + "Message :: " + imageBase64.toString() + RESET);
-			
-			//this.kafkaTemplate.send(kafkaInputTopic, String.join("\r\n", imageBase64));
-			//this.kafkaTemplate.send(kafkaInputTopic, imageBase64.toString());
-			
 			//this.kafkaTemplate.send(kafkaInputTopic, msg);
+			
+    		//List<ImageDTO> images = imageService.getAllImages();
+			//imageService.processImagesByPage();
+			imageService.startTask();
+			
+
 		} else {
-			imageService.createNewImage("Album", "Title");
+			for (int i = 0; i < 100; i++)
+				imageService.createNewImage("Album" + i, "Title" + i);
 		}
 	}
 }
