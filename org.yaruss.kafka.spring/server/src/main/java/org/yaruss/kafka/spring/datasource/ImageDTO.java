@@ -47,6 +47,8 @@ public class ImageDTO {
 	//@Autowired	
 	//private ImageService imageService;
 
+	@Transient
+	@JsonIgnore
 	int id;
 
 	String albumTitle;
@@ -86,7 +88,7 @@ public class ImageDTO {
 			
 			
 			
-		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%: " + filePath);
+		//System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%: " + filePath);
 
 			BufferedImage thumbnail = Scalr.resize(originalImage, 100);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();

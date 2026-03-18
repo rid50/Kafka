@@ -109,13 +109,10 @@ public class ImageService {
 		  // // Output: org.yaruss.kafka.spring.datasource.Image
 		  
 		  
-		  
 			try {
-	  
 				jsonString.set(objectMapper.writeValueAsString(imageDTO));
 				imageBase64.set(Base64.getEncoder().encodeToString(jsonString.get().getBytes(StandardCharsets.UTF_8)));
 				kafkaTemplate.send(kafkaInputTopic, imageBase64.get());
-
 			} catch (Exception e) {
 				throw new RuntimeException("**************************** Error converting DTO to base64 string: ", e);
 			}
@@ -125,9 +122,23 @@ public class ImageService {
 
 		});
 		
+
 		pageNumber++;
 
-		if (!imageSlice.hasNext()) {finishedProcess = true; stopTask();}
+		if (!imageSlice.hasNext()) {
+			try {
+				jsonString.set(objectMapper.writeValueAsString(new byte[0]));
+				imageBase64.set(Base64.getEncoder().encodeToString(jsonString.get().getBytes(StandardCharsets.UTF_8)));
+				kafkaTemplate.send(kafkaInputTopic, imageBase64.get());
+			} catch (Exception e) {
+				throw new RuntimeException("**************************** Error converting DTO to base64 string: ", e);
+			}			
+			// String jsonString  = objectMapper.writeValueAsString(new byte[0]);
+			// String imageBase64 = Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
+			// kafkaTemplate.send(kafkaInputTopic, imageBase64);
+			finishedProcess = true;
+			stopTask();
+		}
 
 	}
 	
@@ -138,12 +149,13 @@ public class ImageService {
 
         // scheduledTask = taskScheduler.scheduleWithFixedDelay(task, delay);
 		
-		if (scheduledTask != null && scheduledTask.isCancelled()) {
-			if (finishedProcess) {
-				pageNumber = 0;
-				finishedProcess = false;
-			}
-				
+		if (scheduledTask != null) {
+			if (scheduledTask.isCancelled()) {
+				if (finishedProcess) {
+					pageNumber = 0;
+					finishedProcess = false;
+				}
+			} else return;
 			//scheduledTask.cancel(false); // Cancel any existing task	?????
 		}
 		
@@ -152,7 +164,7 @@ public class ImageService {
 
 	public void stopTask() {
 		
-		if (scheduledTask != null) {
+		if (scheduledTask != null && !scheduledTask.isCancelled()) {
 			boolean canceled = scheduledTask.cancel(true);
 
 			if (canceled) {
