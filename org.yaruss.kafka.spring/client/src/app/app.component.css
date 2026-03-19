@@ -39,7 +39,7 @@ table {
   /* height: 200px;	 */
     /* width: 50%; */
 	/* margin-left: 20px; */
-	/* width: 100%; */
+	width: 100%;
 	table-layout: fixed;
 	padding: 0px 10px;
     border-collapse: separate;

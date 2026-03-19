@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
 		next: () => {
 			setTimeout(() => {
 				this.disable = false;
-			}, 2000);
+			}, 1000);
 		},
 		error: () => {
 			this.disable = false;
@@ -150,7 +150,7 @@ export class AppComponent implements OnInit {
 	  //tableBody.addEventListener('mouseenter', () => isHovered = true);
 	  //tableBody.addEventListener('mouseleave', () => isHovered = false);		
 	//stompClient.connect({}, function (frame: any) {
-	  stompClient.subscribe("/topic/greeting", (message: any) => {
+	  stompClient.subscribe("/topic/boutique", (message: any) => {
 		//console.log(`Received: ${message.body}`)
 		if(message.body) {
 			
@@ -168,31 +168,6 @@ export class AppComponent implements OnInit {
 
 			const jsonObject = JSON.parse(decodedString);
 
-			//const jsonObject = JSON.parse(message.body);
-
-			//debugger;			
-			// let el: HTMLElement | null = document.getElementById('stompMsg'); 
-			// let clone = el!.cloneNode(true) as HTMLElement; 
-			// clone.style.display = 'block';
-
-			// document.body.appendChild(clone);
-
-			// var container = document.getElementById("tableLayout") as HTMLTableElement;
-			// // Scrolls the container down by 1 pixel every 100 milliseconds
-			// var scrollInterval = setInterval(function() {
-			// 	container.scrollBy(0, 1);
-			// }, 100); 			
-
-
-			// let tableBody = document.getElementById("tableBody") as HTMLTableElement;
-
-			// if (tableBody instanceof HTMLTableElement) {
-    		// 	const newRow = tableBody.insertRow();
-
-			// } else {
-			// // Handle the case where the element is null or not a table
-			// console.error("The element found is not a table element.");
-			// }
 //debugger;
 			if (jsonObject == "") {
 				//that.clickMe();
@@ -239,22 +214,6 @@ export class AppComponent implements OnInit {
 			//triggerScroll(newRow, isHovered);
 			tableBody.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
-
-
-			//(cell3 as HTMLImageElement).src =  "data:image/png;base64," + jsonObject.fileContent;
-			
-			//imgElement = document.getElementById("image");
-			//(imgElement as HTMLImageElement).src = jsonObject.fileContent; 
-			//jsonObject.
-			//const jsonString = JSON.stringify(jsonObject, null, 4);
-			//document.body.innerHTML = `<pre>${jsonString}</pre>`;
-		  //$(".msg").html(jsonString)
-
-		  //$(".msg").html(message.body)
-
-			// const base64Image = message.body;
-			// const imageElement = document.getElementById('myImage');
-			// imageElement.src = 'data:image/png;base64,' + base64Image;
 		}
 	  });
     };
@@ -275,19 +234,9 @@ export class AppComponent implements OnInit {
 			if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
 				element.scrollTop = 0;
 			}			
-		}, 20); // Adjust speed
+		}, 20);
 	}
 	
-	
-// // Stop on hover
-// tableBody.addEventListener('mouseenter', () => {
-//     clearInterval(scrollInterval);
-// });
-
-// // Resume on hover out
-// container.addEventListener('mouseleave', () => {
-//     startAutoScroll();
-// });	
 	function triggerScroll(element: HTMLTableRowElement, isHovered: boolean) {
 	  if (!isHovered) {
 		element.scrollIntoView({ behavior: 'smooth' });
@@ -295,10 +244,6 @@ export class AppComponent implements OnInit {
 	}
 
 	stompClient.onStompError = function (frame) {
-	  // Invoked in case of an error reported by the broker
-	  // Bad login/passcode typically causes an error
-	  // Compliant brokers set the `message` header with a brief message; the body may contain details.
-	  // Compliant brokers terminate the connection after any error
 	  console.log('Broker reported error: ' + frame.headers['message']);
 	  console.log('Additional details: ' + frame.body);
 	};
