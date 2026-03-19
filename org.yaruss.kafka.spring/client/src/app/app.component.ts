@@ -4,6 +4,10 @@ import { Title } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
+//import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 //import Stomp from 'stompjs';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
@@ -22,13 +26,57 @@ export class AppComponent implements OnInit {
   //url = 'http://localhost:8080/websocket'
   //client: any;
   
-  constructor(private title: Title){
+  // @Injectable({ providedIn: 'root' })
+  constructor(private title: Title, private http: HttpClient){
     //this.connection();
   }
+
+  //caption: string = "Start";
+  start = true;
+  disable = false;
+  
+  clickMe(): any {
+	
+	//alert("kuku");
+	//console.log("******************************* start: " + this.start);
+//debugger;
+	this.disable = true;
+	
+	let url: string;
+	if (!this.start) {
+		url = 'http://localhost:8080/start_kafka_broker';
+		this.start = true;
+		//this.caption = "Start";
+	} else {
+		url = 'http://localhost:8080/stop_kafka_broker';
+		this.start = false;
+		//this.caption = "Stop";
+	}
+	
+    this.http.get<any>(url).subscribe({	//The .get() method returns an Observable that emits the response data
+		next: () => {
+			setTimeout(() => {
+				this.disable = false;
+			}, 2000);
+		},
+		error: () => {
+			this.disable = false;
+		}
+    });	
+  }  
+
+	// clickMe() {
+		// alert("Button was clicked!");
+		// window.location.href = 'http://localhost:8080/start_kafka_broker';
+	  
+	// }
   
 	isHovered = false;
 
-	tableBody: any = null;
+	//tableBody: HTMLTableElement;
+
+	//table: any;
+		
 	//tableBody = document.getElementById("tableBody") as HTMLTableElement;
 	//this.tableBody.addEventListener('mouseenter', () => this.isHovered = true);
 	// this.tableBody.addEventListener('mouseleave', () => this.isHovered = false);
@@ -36,13 +84,30 @@ export class AppComponent implements OnInit {
 	//that = this; 
   ngOnInit() {
 
-	this.tableBody = document.getElementById("tableBody") as HTMLTableElement;
-	this.tableBody.addEventListener('mouseenter', () => this.isHovered = true);
-	this.tableBody.addEventListener('mouseleave', () => this.isHovered = false);
+	//this.table = document.getElementById("table") as HTMLTableElement;
+	// this.tableBody = document.getElementById("tableBody") as HTMLTableElement;
+	//let tableBody: any;
+	let tableBody: HTMLTableElement = document.getElementById("tableBody") as HTMLTableElement;
+/*	
+	tableBody.addEventListener('scroll', function() {
+		// Check if the user is at the bottom of the scroll
+		console.log("*******************************");
+		if (tableBody.offsetHeight + tableBody.scrollTop >= tableBody.scrollHeight) {
+			// Run your handler function when the end is reached
+		console.log("Reached the end of the table!");
+		}
+	});
+*/
+	// this.tableBody.addEventListener('mouseenter', () => this.isHovered = true);
+	// this.tableBody.addEventListener('mouseleave', () => this.isHovered = false);
+	
+	// this.table = document.getElementsByTagName("table")[0] as HTMLTableElement;
+	// this.table.addEventListener('mouseenter', () => this.clickMe());
+	// this.table.addEventListener('mouseleave', () => this.clickMe());
 
 	this.title.setTitle('Angular Spring Websocket');
 	 
-	let that = this; 
+	let that = this;
 
 //debugger; 
 	const stompClient = new Client({
@@ -117,7 +182,7 @@ export class AppComponent implements OnInit {
 			// var scrollInterval = setInterval(function() {
 			// 	container.scrollBy(0, 1);
 			// }, 100); 			
-			//debugger;
+
 
 			// let tableBody = document.getElementById("tableBody") as HTMLTableElement;
 
@@ -128,8 +193,14 @@ export class AppComponent implements OnInit {
 			// // Handle the case where the element is null or not a table
 			// console.error("The element found is not a table element.");
 			// }
-
-			let newRow = that.tableBody.insertRow();
+//debugger;
+			if (jsonObject == "") {
+				//that.clickMe();
+				that.start = false;
+				return;
+			}
+				
+			let newRow = tableBody.insertRow();
 			let cell1 = newRow.insertCell(0);
     		let cell2 = newRow.insertCell(1);
     		let cell3 = newRow.insertCell(2);
@@ -154,17 +225,21 @@ export class AppComponent implements OnInit {
 			//(imgElement as HTMLElement).innerHTML = jsonObject.title;
 			
 			//imgElement = document.getElementById("image");
-			
-			let img = document.createElement("img");
-			img.src = "data:image/png;base64," + jsonObject.fileContent;
-			img.alt = "Thumbnail";
-			//img.height =84;
-			//img.width = 56;
-			cell3.appendChild(img);
-			
+//debugger;	
+			if (jsonObject.fileContent !== "") {
+				let img = document.createElement("img");
+				img.src = "data:image/png;base64," + jsonObject.fileContent;
+				img.alt = "Thumbnail";
+				//img.height =84;
+				//img.width = 56;
+				cell3.appendChild(img);
+				//console.log("*******************************");
+			}
 			//startAutoScroll(that.tableBody);
 			//triggerScroll(newRow, isHovered);
-			//newRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
+			tableBody.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+
 
 			//(cell3 as HTMLImageElement).src =  "data:image/png;base64," + jsonObject.fileContent;
 			
@@ -232,5 +307,5 @@ export class AppComponent implements OnInit {
   }
 
 
- 
+
 }
